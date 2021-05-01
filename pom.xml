@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>groupId</groupId>
+    <artifactId>MediaPlayer</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+
+        <!-- jaudiotagger.jar 本身不能播放 音频文件，但是能解码音频文件中的标签信息。-->
+        <dependency>
+            <groupId>org</groupId>
+            <artifactId>jaudiotagger</artifactId>
+            <version>2.0.3</version>
+        </dependency>
+
+        <!-- 如果需要解码播放Mp3文件则引入这个jar包 -->
+        <dependency>
+            <groupId>javazoom</groupId>
+            <artifactId>jlayer</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+
+        <!-- 如果需要解码播放Mp3,Ogg文件则引入这个jar包 -->
+        <dependency>
+            <groupId>com.googlecode.soundlibs</groupId>
+            <artifactId>tritonus-share</artifactId>
+            <version>0.3.7-2</version>
+        </dependency>
+
+        <!-- 如果需要解码播放Ogg文件则引入这个jar包 -->
+        <dependency>
+            <groupId>com.googlecode.soundlibs</groupId>
+            <artifactId>jorbis</artifactId>
+            <version>0.0.17.4</version>
+        </dependency>
+
+        <!-- 如果需要解码播放Ogg文件则引入这个jar包 -->
+        <dependency>
+            <groupId>com.googlecode.soundlibs</groupId>
+            <artifactId>vorbisspi</artifactId>
+            <version>1.0.3-1</version>
+        </dependency>
+
+        <!-- 如果需要解码播放Flac文件则引入这个jar包 -->
+        <dependency>
+            <groupId>org.jflac</groupId>
+            <artifactId>jflac-codec</artifactId>
+            <version>1.5.2</version>
+        </dependency>
+
+    </dependencies>
+
+</project>
