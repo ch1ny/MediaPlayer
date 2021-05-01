@@ -30,14 +30,12 @@ import java.util.Vector;
 import java.util.logging.Level;
 
 /**
- * 允许播放格式 Wav, Flac, Mp3, Ape, Ogg
+ * 允许播放格式 Wav, Flac, Mp3, Ogg
  * 解码所需依赖：
  * 播放Flac：Maven --> jflac
- * 播放Mp3：lib --> mp3spi; tritonus_share
- *         Maven --> jlayer;
- * 播放Ape：lib --> jmactritonusspi
+ * 播放Mp3：Maven --> jlayer; tritonus_share; mp3spi
  * 播放Ogg：Maven --> jorbis; vorbisspi; tritonus_share
- * 暂时无法播放格式 wma m4a aac
+ * 暂时无法播放格式 wma m4a aac ape
  */
 
 public class MusicPlayer {
@@ -58,7 +56,6 @@ public class MusicPlayer {
         if (!v.isEmpty()) {
             String path = (String) v.get(0);
             prepare(path);
-            thread = new PlayerThread(path);
             MainFrame.getBottom().getFunction().haveSongs();
         } else {
             totalTime = 0;
@@ -79,13 +76,12 @@ public class MusicPlayer {
         }
         filePath = path;
         prepare(path);
-        thread = new PlayerThread(path);
+        Process.getInstance().changeMusic(totalTime);
         thread.start();
         isPlaying = true;
-        Process.getInstance().changeMusic(totalTime);
     }
 
-    public void pause() {
+    public static void pause() {
         thread.pause();
         isPlaying = false;
     }
@@ -111,7 +107,6 @@ public class MusicPlayer {
     }
 
     public void playPrev() throws TagException, ReadOnlyFileException, CannotReadException, InvalidAudioFrameException, IOException, LineUnavailableException, UnsupportedAudioFileException {
-        isPlaying = false;
         filePath = getMusicName(-1);
         play(filePath);
         Bottom.getFunction().playBegin();
@@ -155,7 +150,7 @@ public class MusicPlayer {
     }
 
     // 播放歌曲之前预先做好：准备好播放流、设置左下方标题
-    private static void prepare(String path) throws ReadOnlyFileException, IOException, TagException, InvalidAudioFrameException, CannotReadException {
+    private static void prepare(String path) throws ReadOnlyFileException, IOException, TagException, InvalidAudioFrameException, CannotReadException, LineUnavailableException, UnsupportedAudioFileException {
         filePath = path;
         if (checkAudioExists(path)) {
             String musicName = filePath.substring(filePath.lastIndexOf("\\") + 1, filePath.lastIndexOf("."));
@@ -164,6 +159,7 @@ public class MusicPlayer {
             ViewPanel view = MainFrame.getView();
             BufferedImage bufferedImage = getCover(filePath);
             view.getCover().setCover(bufferedImage);
+            thread = new PlayerThread(path);
         }
     }
 
@@ -227,6 +223,7 @@ public class MusicPlayer {
                 if (filePath.equals(path)) {
                     try {
                         playNext();
+                        pause();
                     } catch (ArrayIndexOutOfBoundsException e1) {}
                     MainFrame.getBottom().getFunction().playEnd();
                     if (rest.equals("")) {
