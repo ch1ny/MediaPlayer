@@ -1,10 +1,12 @@
 package com.player.UI.Bottom;
 
 import com.player.MainFrame;
-import com.player.Player.MusicPlayer;
+import com.player.Player.MediaPlayer;
 import com.player.UI.Style.SliderStyle;
+import com.player.Util.JudgeMoV;
 import com.player.Util.TimeFormat;
 import com.player.Player.Process;
+import uk.co.caprica.vlcj.player.embedded.DefaultAdaptiveRuntimeFullScreenStrategy;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,7 +33,7 @@ public class Function extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (play.isEnabled()) {
-                    MusicPlayer player = MusicPlayer.getInstance();
+                    MediaPlayer player = MediaPlayer.getInstance();
                     if (!player.isPlaying()) { // 没在播放 -> 播放
                         play.setIcon(new ImageIcon(new ImageIcon("res/icon/pause.png").getImage().getScaledInstance((int) (height * 0.08 - 40),(int) (height * 0.08 - 40), Image.SCALE_SMOOTH)));
                         try {
@@ -56,7 +58,7 @@ public class Function extends JPanel {
             public void mouseReleased(MouseEvent e) {
                 if (next.isEnabled()) {
                     try {
-                        MusicPlayer.getInstance().playNext();
+                        MediaPlayer.getInstance().playNext();
                     } catch (Exception e1) {
                         e1.printStackTrace();
                     }
@@ -72,7 +74,7 @@ public class Function extends JPanel {
             public void mouseReleased(MouseEvent e) {
                 if (prev.isEnabled()) {
                     try {
-                        MusicPlayer.getInstance().playPrev();
+                        MediaPlayer.getInstance().playPrev();
                     } catch (Exception e1) {
                         e1.printStackTrace();
                     }
@@ -88,38 +90,62 @@ public class Function extends JPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (forward.isEnabled()) {
-                    if (MusicPlayer.getInstance().getPlayerThread() != null) {
-                        play.setIcon(new ImageIcon(new ImageIcon("res/icon/pause.png").getImage().getScaledInstance((int) (height * 0.08 - 40),(int) (height * 0.08 - 40), Image.SCALE_SMOOTH)));
-                        double percent = (double) playProcessSlider.getValue() / 100; // 相较于当前的进度
-                        double distance = 10.0; // 设置跳跃间隔
-                        double rate = distance / MusicPlayer.getInstance().getLength();
-                        percent += rate;
-                        if (percent > 1) {
-                            percent = 1;
-                        }
-                        MusicPlayer.getInstance().jump(percent);
+                    switch (MediaPlayer.getInstance().getMoV()) {
+                        case JudgeMoV.MUSIC:
+                            if (MediaPlayer.getInstance().getMusic() != null) {
+                                play.setIcon(new ImageIcon(new ImageIcon("res/icon/pause.png").getImage().getScaledInstance((int) (height * 0.08 - 40),(int) (height * 0.08 - 40), Image.SCALE_SMOOTH)));
+                                double percent = (double) playProcessSlider.getValue() / 100; // 相较于当前的进度
+                                double distance = 10.0; // 设置跳跃间隔
+                                double rate = distance / MediaPlayer.getInstance().getLength();
+                                percent += rate;
+                                if (percent > 1) {
+                                    percent = 1;
+                                }
+                                MediaPlayer.getInstance().jump(percent);
+                            }
+                            break;
+                        case JudgeMoV.VIDEO:
+                            if (MediaPlayer.getInstance().getVideo() != null) {
+                                play.setIcon(new ImageIcon(new ImageIcon("res/icon/pause.png").getImage().getScaledInstance((int) (height * 0.08 - 40),(int) (height * 0.08 - 40), Image.SCALE_SMOOTH)));
+                                long now = MainFrame.getVideo().getMediaPlayer().getTime();
+                                now += 10000;
+                                MediaPlayer.getInstance().jump(now);
+                            }
+                            break;
                     }
                     MainFrame.getFrame().requestFocus();
                 }
             }
         });
-        backward = new  functionButton(new ImageIcon(new ImageIcon("res/icon/backward.png").getImage().getScaledInstance((int) (height * 0.08 - 40),(int) (height * 0.08 - 40), Image.SCALE_SMOOTH)));
+        backward = new functionButton(new ImageIcon(new ImageIcon("res/icon/backward.png").getImage().getScaledInstance((int) (height * 0.08 - 40),(int) (height * 0.08 - 40), Image.SCALE_SMOOTH)));
         backward.setBounds((int) (((width * 0.8 * 0.8) - (height * 0.08 - 40)) / 2 - 100), 30, (int) (height * 0.08 - 40), (int) (height * 0.08 - 40));
         add(backward);
         backward.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (backward.isEnabled()) {
-                    if (MusicPlayer.getInstance().getPlayerThread() != null) {
-                        play.setIcon(new ImageIcon(new ImageIcon("res/icon/pause.png").getImage().getScaledInstance((int) (height * 0.08 - 40),(int) (height * 0.08 - 40), Image.SCALE_SMOOTH)));
-                        double percent = (double) Bottom.getFunction().getSlider().getValue() / 100; // 相较于当前的进度
-                        double distance = 10.0; // 设置跳跃间隔
-                        double rate = distance / MusicPlayer.getInstance().getLength();
-                        percent -= rate;
-                        if (percent < 0) {
-                            percent = 0;
-                        }
-                        MusicPlayer.getInstance().jump(percent);
+                    switch (MediaPlayer.getInstance().getMoV()) {
+                        case JudgeMoV.MUSIC:
+                            if (MediaPlayer.getInstance().getMusic() != null) {
+                                play.setIcon(new ImageIcon(new ImageIcon("res/icon/pause.png").getImage().getScaledInstance((int) (height * 0.08 - 40),(int) (height * 0.08 - 40), Image.SCALE_SMOOTH)));
+                                double percent = (double) playProcessSlider.getValue() / 100; // 相较于当前的进度
+                                double distance = 10.0; // 设置跳跃间隔
+                                double rate = distance / MediaPlayer.getInstance().getLength();
+                                percent -= rate;
+                                if (percent < 0) {
+                                    percent = 0;
+                                }
+                                MediaPlayer.getInstance().jump(percent);
+                            }
+                            break;
+                        case JudgeMoV.VIDEO:
+                            if (MediaPlayer.getInstance().getVideo() != null) {
+                                play.setIcon(new ImageIcon(new ImageIcon("res/icon/pause.png").getImage().getScaledInstance((int) (height * 0.08 - 40),(int) (height * 0.08 - 40), Image.SCALE_SMOOTH)));
+                                long now = MainFrame.getVideo().getMediaPlayer().getTime();
+                                now -= 10000;
+                                MediaPlayer.getInstance().jump(now);
+                            }
+                            break;
                     }
                     MainFrame.getFrame().requestFocus();
                 }
@@ -136,7 +162,7 @@ public class Function extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (playProcessSlider.isEnabled()) {
-                    if (MusicPlayer.getInstance().getPlayerThread() != null) {
+                    if (MediaPlayer.getInstance().getMusic() != null || MediaPlayer.getInstance().getVideo() != null) {
                         play.setIcon(new ImageIcon(new ImageIcon("res/icon/pause.png").getImage().getScaledInstance((int) (height * 0.08 - 40),(int) (height * 0.08 - 40), Image.SCALE_SMOOTH)));
                         double percent = e.getX() / (double) playProcessSlider.getWidth(); // 相较于当前的进度
                         if (percent > 1) {
@@ -144,7 +170,16 @@ public class Function extends JPanel {
                         } else if (percent < 0) {
                             percent = 0;
                         }
-                        MusicPlayer.getInstance().jump(percent);
+                        switch (MediaPlayer.getInstance().getMoV()) {
+                            case JudgeMoV.MUSIC:
+                                MediaPlayer.getInstance().jump(percent);
+                                break;
+                            case JudgeMoV.VIDEO:
+                                long total = MainFrame.getVideo().getMediaPlayer().getLength();
+                                long time = (long) (total * percent);
+                                MediaPlayer.getInstance().jump(time);
+                                break;
+                        }
                     }
                     MainFrame.getFrame().requestFocus();
                 }
@@ -155,7 +190,7 @@ public class Function extends JPanel {
             public void mouseDragged(MouseEvent e) {
                 if (playProcessSlider.isEnabled()) {
                     double percent = e.getX() / (double) playProcessSlider.getWidth();
-                    double time = MusicPlayer.getInstance().getLength() * percent;
+                    double time = MediaPlayer.getInstance().getLength() * percent;
                     if (time > Process.getInstance().getTotalLength()) {
                         time = Process.getInstance().getTotalLength();
                     } else if (time < 0) {

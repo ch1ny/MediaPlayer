@@ -1,8 +1,9 @@
 package com.player.UI.Left;
 
 import com.player.MainFrame;
-import com.player.Player.MusicPlayer;
+import com.player.Player.MediaPlayer;
 import com.player.Util.AudioFormat;
+import com.player.Util.VideoFormat;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
@@ -83,17 +84,18 @@ public class ListTop extends JPanel {
             UIManager.setLookAndFeel(getSystemLookAndFeelClassName()); // 将JFileChooser外观设置成系统样式
             JFileChooser chooser = new JFileChooser(".");
             UIManager.setLookAndFeel(myLookAndFeel); // 将应用外观设置改回自定义的外观设置，防止frame重绘时改变其他组件样式
-            chooser.setFileFilter(new Mp3Chooser());
+            chooser.setFileFilter(new AudioChooser());
+            chooser.setPreferredSize(new Dimension((int) (MainFrame.getFrame().getWidth() * 0.6),(int) (MainFrame.getFrame().getHeight() * 0.6)));
+            chooser.setDialogTitle("选择媒体文件");
             chooser.showOpenDialog(null);
-            chooser.setName("选择Mp3文件");
             File file = chooser.getSelectedFile();
             if (file != null) {
                 String path = file.getPath();
-                if (!new Mp3Chooser().accept(file)) {
+                if (!new AudioChooser().accept(file)) {
                     JOptionPane.showMessageDialog(null,"文件格式不支持！！", "文件不支持", 0);
                     return;
                 }
-                File audio = new File("res/audio");
+                File audio = new File("res/media");
                 FileInputStream input = new FileInputStream(audio);
                 Scanner sc = new Scanner(input);
                 String had = "";
@@ -112,29 +114,34 @@ public class ListTop extends JPanel {
                 bw.flush();
                 bw.close();
                 if (had.equals("")) {
-                    MusicPlayer.getInstance().init();
+                    MediaPlayer.getInstance().init();
                 }
                 MainFrame.rebuildList();
             }
         }
 
-        private class Mp3Chooser extends FileFilter {
+        private class AudioChooser extends FileFilter {
 
             @Override
             public boolean accept(File f) {
                 String name = f.getName();
-                return f.isDirectory() || AudioFormat.endWith(name);
+                return f.isDirectory() || AudioFormat.endWith(name) || VideoFormat.endWith(name);
             }
 
             @Override
             public String getDescription() {
                 String desc = "";
+                for (String format:
+                     AudioFormat.permit) {
+                    desc += "*." + format;
+                    desc += ",";
+                }
                 int i = 0;
-                for (AudioFormat.PermittedFormat format:
-                     AudioFormat.PermittedFormat.values()) {
+                for (String format:
+                        VideoFormat.permit) {
                     desc += "*." + format;
                     i++;
-                    if (i < AudioFormat.PermittedFormat.values().length) {
+                    if (i < VideoFormat.permit.length) {
                         desc += ",";
                     }
                 }

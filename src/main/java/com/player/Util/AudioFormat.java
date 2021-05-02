@@ -4,12 +4,12 @@ import java.util.Locale;
 
 public class AudioFormat {
 
-    public enum PermittedFormat {MP3, FLAC, OGG, WAV};
+    public static String[] permit = {"mp3","ogg","wav","flac"};
 
     public static boolean endWith(String str) {
-        for (PermittedFormat format:
-             PermittedFormat.values()) {
-            if (str.toUpperCase(Locale.ROOT).endsWith("." + format)) {
+        for (String format:
+             permit) {
+            if (str.toLowerCase(Locale.ROOT).endsWith("." + format)) {
                 return true;
             }
         }

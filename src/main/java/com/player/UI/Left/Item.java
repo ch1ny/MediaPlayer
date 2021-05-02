@@ -1,7 +1,7 @@
 package com.player.UI.Left;
 
 import com.player.MainFrame;
-import com.player.Player.MusicPlayer;
+import com.player.Player.MediaPlayer;
 import com.player.UI.Bottom.Function;
 
 import javax.swing.*;
@@ -36,7 +36,7 @@ public class Item extends JPanel {
                     Function function = MainFrame.getBottom().getFunction();
                     function.playBegin();
                     try {
-                        MusicPlayer player = MusicPlayer.getInstance();
+                        MediaPlayer player = MediaPlayer.getInstance();
                         if (player.isPlaying()) {
                             player.pause();
                         }
@@ -45,7 +45,7 @@ public class Item extends JPanel {
                         e1.printStackTrace();
                     }
                 } else if (e.getButton() == MouseEvent.BUTTON3){
-                    File file = new File("res/audio");
+                    File file = new File("res/media");
                     try {
                         FileInputStream input = new FileInputStream(file);
                         Scanner sc = new Scanner(input);
@@ -61,16 +61,16 @@ public class Item extends JPanel {
                         bw.write(rest);
                         bw.flush();
                         bw.close();
-                        if (MusicPlayer.getInstance().getSong().equals(path)) {
+                        if (MediaPlayer.getInstance().getFilePath().equals(path)) {
                             try {
-                                MusicPlayer.getInstance().playNext();
+                                MediaPlayer.getInstance().playNext();
                             } catch (ArrayIndexOutOfBoundsException e1) {
 
                             }
-                            MusicPlayer.getInstance().pause();
+                            MediaPlayer.getInstance().pause();
                             MainFrame.getBottom().getFunction().playEnd();
                             if (rest.equals("")) {
-                                MusicPlayer.getInstance().init();
+                                MediaPlayer.getInstance().init();
                             }
                         }
                         MainFrame.rebuildList();

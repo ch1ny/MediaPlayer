@@ -4,7 +4,7 @@
 
 package com.player;
 
-import com.player.Player.MusicPlayer;
+import com.player.Player.MediaPlayer;
 
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
@@ -29,7 +29,7 @@ public class Main {
                 }
                 try {
                     MainFrame mainFrame = new MainFrame();
-                    new MusicPlayer().init();
+                    new MediaPlayer().init();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

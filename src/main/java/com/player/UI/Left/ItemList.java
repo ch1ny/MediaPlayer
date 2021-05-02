@@ -2,6 +2,7 @@ package com.player.UI.Left;
 
 import com.player.MainFrame;
 import com.player.Util.AudioFormat;
+import com.player.Util.VideoFormat;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,21 +30,21 @@ public class ItemList extends JPanel {
     }
 
     private Vector getFileList() {
-        File audio = new File("res/audio");
-        if (!audio.exists()) {
+        File media = new File("res/media");
+        if (!media.exists()) {
             try {
-                audio.createNewFile();
+                media.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         try {
-            FileInputStream stream = new FileInputStream(audio);
+            FileInputStream stream = new FileInputStream(media);
             Scanner sc = new Scanner(stream);
             Vector list = new Vector();
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
-                if (AudioFormat.endWith(line))
+                if (AudioFormat.endWith(line) || VideoFormat.endWith(line))
                     list.add(line);
             }
             return list;

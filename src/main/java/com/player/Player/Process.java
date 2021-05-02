@@ -7,7 +7,7 @@ public class Process {
 
     private int totalLength;
     private static Process process = new Process();
-    private MusicProcessThread musicProcessThread;
+    private ProcessThread processThread;
 
     public static Process getInstance() {
         return process;
@@ -19,42 +19,42 @@ public class Process {
 
     //初始化进度条
     public void init() {
-        totalLength = MusicPlayer.getInstance().getLength();
-        musicProcessThread = new MusicProcessThread(0, totalLength);
-        musicProcessThread.start();
-        musicProcessThread.suspend();
+        totalLength = MediaPlayer.getInstance().getLength();
+        processThread = new ProcessThread(0, totalLength);
+        processThread.start();
+        processThread.suspend();
     }
 
     //暂停播放
     public void pause() {
-        musicProcessThread.suspend();
+        processThread.suspend();
     }
 
     //继续播放
     public void go_on() {
-        musicProcessThread.resume();
+        processThread.resume();
     }
 
     //调整进度，current是确定的时刻（秒）
     public void setProcess(int current) {
         try {
-            musicProcessThread.stop();
+            processThread.stop();
         } catch (NullPointerException e) {}
-        musicProcessThread = new MusicProcessThread(current, totalLength);
-        musicProcessThread.start();
+        processThread = new ProcessThread(current, totalLength);
+        processThread.start();
     }
 
-    public void changeMusic(int length) {
+    public void changeMedia(int length) {
         totalLength = length;
-        musicProcessThread = new MusicProcessThread(0, this.totalLength);
-        musicProcessThread.start();
+        processThread = new ProcessThread(0, this.totalLength);
+        processThread.start();
     }
 
     //进度条线程
-    class MusicProcessThread extends Thread {
+    class ProcessThread extends Thread {
         private int current;
 
-        public MusicProcessThread(int now, int time) {
+        public ProcessThread(int now, int time) {
             Function function = MainFrame.getBottom().getFunction();
             function.setTotalLength(time);
             current = now;
@@ -76,7 +76,7 @@ public class Process {
                 }
                 function.setCurrent(0);
                 function.setPlayProcessSlider(0);
-                MusicPlayer.getInstance().playEnd();
+                MediaPlayer.getInstance().playEnd();
             } catch (Exception e) {
 
             }

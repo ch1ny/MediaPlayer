@@ -5,17 +5,24 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 
-import com.player.Player.MusicPlayer;
+import com.player.Player.MediaPlayer;
+import com.player.Player.MediaPlayer;
 import com.player.UI.Left.List;
 
 import com.player.UI.Bottom.Bottom;
 import com.player.UI.View.ViewPanel;
+import com.player.Util.JudgeMoV;
+import com.sun.jna.NativeLibrary;
+import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
+import uk.co.caprica.vlcj.player.embedded.DefaultAdaptiveRuntimeFullScreenStrategy;
+import uk.co.caprica.vlcj.runtime.RuntimeUtil;
 
 public class MainFrame extends JFrame {
 
     private static JFrame frame;
     private static Bottom bottom;
     private static ViewPanel view;
+    private static EmbeddedMediaPlayerComponent video;
     private static List list;
 
     public static Bottom getBottom() {
@@ -44,6 +51,10 @@ public class MainFrame extends JFrame {
         list = new List();
         list.setBounds(0,0,(int) (width * 0.8 * 0.2),(int) (height * 0.8 * 0.85));
         frame.add(list);
+        NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), "res/libvlc");
+        video = new EmbeddedMediaPlayerComponent();
+        video.setBounds((int) (width * 0.8 * 0.2), 0, (int) (width * 0.8 * 0.8), (int) (height * 0.8 * 0.85));
+        frame.add(video);
         view = new ViewPanel();
         view.setBounds((int) (width * 0.8 * 0.2), 0, (int) (width * 0.8 * 0.8), (int) (height * 0.8 * 0.85));
         frame.add(view);
@@ -63,6 +74,14 @@ public class MainFrame extends JFrame {
         frame.revalidate(); // repaint()方法重绘，revalidate()方法对组件进行验证，重新排列组件
     }
 
+    public static void showVideo() {
+        video.setVisible(true);
+    }
+
+    public static void hideVideo() {
+        video.setVisible(false);
+    }
+
     private void FocusInit() {
         frame.setFocusable(true);
     }
@@ -76,14 +95,14 @@ public class MainFrame extends JFrame {
                         switch (e.getKeyCode()) {
                             case KeyEvent.VK_RIGHT:
                                 try {
-                                    MusicPlayer.getInstance().playNext();
+                                    MediaPlayer.getInstance().playNext();
                                 } catch (Exception e1) {
                                     e1.printStackTrace();
                                 }
                                 break;
                             case KeyEvent.VK_LEFT:
                                 try {
-                                    MusicPlayer.getInstance().playPrev();
+                                    MediaPlayer.getInstance().playPrev();
                                 } catch (Exception e1) {
                                     e1.printStackTrace();
                                 }
@@ -92,7 +111,7 @@ public class MainFrame extends JFrame {
                     } else {
                         switch (e.getKeyCode()) {
                             case KeyEvent.VK_SPACE:
-                                MusicPlayer player = MusicPlayer.getInstance();
+                                MediaPlayer player = MediaPlayer.getInstance();
                                 if (player.isPlaying()) {
                                     player.pause();
                                     Bottom.getFunction().playEnd();
@@ -106,29 +125,53 @@ public class MainFrame extends JFrame {
                                 }
                                 break;
                             case KeyEvent.VK_RIGHT:
-                                if (MusicPlayer.getInstance().getPlayerThread() != null) {
-                                    Bottom.getFunction().playBegin();
-                                    double percent = (double) Bottom.getFunction().getSlider().getValue() / 100; // 相较于当前的进度
-                                    double distance = 10.0; // 设置跳跃间隔
-                                    double rate = distance / MusicPlayer.getInstance().getLength();
-                                    percent += rate;
-                                    if (percent > 1) {
-                                        percent = 1;
-                                    }
-                                    MusicPlayer.getInstance().jump(percent);
+                                switch (MediaPlayer.getInstance().getMoV()) {
+                                    case JudgeMoV.MUSIC:
+                                        if (MediaPlayer.getInstance().getMusic() != null) {
+                                            Bottom.getFunction().playBegin();
+                                            double percent = (double) Bottom.getFunction().getSlider().getValue() / 100; // 相较于当前的进度
+                                            double distance = 10.0; // 设置跳跃间隔
+                                            double rate = distance / MediaPlayer.getInstance().getLength();
+                                            percent += rate;
+                                            if (percent > 1) {
+                                                percent = 1;
+                                            }
+                                            MediaPlayer.getInstance().jump(percent);
+                                        }
+                                        break;
+                                    case JudgeMoV.VIDEO:
+                                        if (MediaPlayer.getInstance().getVideo() != null) {
+                                            Bottom.getFunction().playBegin();
+                                            long now = MainFrame.getVideo().getMediaPlayer().getTime();
+                                            now += 10000;
+                                            MediaPlayer.getInstance().jump(now);
+                                        }
+                                        break;
                                 }
                                 break;
                             case KeyEvent.VK_LEFT:
-                                if (MusicPlayer.getInstance().getPlayerThread() != null) {
-                                    Bottom.getFunction().playBegin();
-                                    double percent = (double) Bottom.getFunction().getSlider().getValue() / 100; // 相较于当前的进度
-                                    double distance = 10.0; // 设置跳跃间隔
-                                    double rate = distance / MusicPlayer.getInstance().getLength();
-                                    percent -= rate;
-                                    if (percent < 0) {
-                                        percent = 0;
-                                    }
-                                    MusicPlayer.getInstance().jump(percent);
+                                switch (MediaPlayer.getInstance().getMoV()) {
+                                    case JudgeMoV.MUSIC:
+                                        if (MediaPlayer.getInstance().getMusic() != null) {
+                                            Bottom.getFunction().playBegin();
+                                            double percent = (double) Bottom.getFunction().getSlider().getValue() / 100; // 相较于当前的进度
+                                            double distance = 10.0; // 设置跳跃间隔
+                                            double rate = distance / MediaPlayer.getInstance().getLength();
+                                            percent -= rate;
+                                            if (percent < 0) {
+                                                percent = 0;
+                                            }
+                                            MediaPlayer.getInstance().jump(percent);
+                                        }
+                                        break;
+                                    case JudgeMoV.VIDEO:
+                                        if (MediaPlayer.getInstance().getVideo() != null) {
+                                            Bottom.getFunction().playBegin();
+                                            long now = MainFrame.getVideo().getMediaPlayer().getTime();
+                                            now -= 10000;
+                                            MediaPlayer.getInstance().jump(now);
+                                        }
+                                        break;
                                 }
                                 break;
                         }
@@ -138,4 +181,7 @@ public class MainFrame extends JFrame {
         });
     }
 
+    public static EmbeddedMediaPlayerComponent getVideo() {
+        return video;
+    }
 }

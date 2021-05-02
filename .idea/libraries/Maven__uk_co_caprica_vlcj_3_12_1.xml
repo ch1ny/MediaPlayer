@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: uk.co.caprica:vlcj:3.12.1">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/uk/co/caprica/vlcj/3.12.1/vlcj-3.12.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/uk/co/caprica/vlcj/3.12.1/vlcj-3.12.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/uk/co/caprica/vlcj/3.12.1/vlcj-3.12.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
