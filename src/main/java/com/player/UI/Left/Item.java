@@ -45,37 +45,40 @@ public class Item extends JPanel {
                         e1.printStackTrace();
                     }
                 } else if (e.getButton() == MouseEvent.BUTTON3){
-                    File file = new File("res/media");
-                    try {
-                        FileInputStream input = new FileInputStream(file);
-                        Scanner sc = new Scanner(input);
-                        String rest = "";
-                        while (sc.hasNextLine()) {
-                            String line = sc.nextLine();
-                            if (!line.equals(path)) {
-                                rest += line + "\n";
+                    int confirm = JOptionPane.showConfirmDialog(null, "是否要将文件：" + title.getText() + "移出播放列表？", "移除文件", JOptionPane.YES_NO_OPTION);
+                    if (confirm == 0) {
+                        File file = new File("res/media");
+                        try {
+                            FileInputStream input = new FileInputStream(file);
+                            Scanner sc = new Scanner(input);
+                            String rest = "";
+                            while (sc.hasNextLine()) {
+                                String line = sc.nextLine();
+                                if (!line.equals(path)) {
+                                    rest += line + "\n";
+                                }
                             }
-                        }
-                        input.close();
-                        BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-                        bw.write(rest);
-                        bw.flush();
-                        bw.close();
-                        if (MediaPlayer.getInstance().getFilePath().equals(path)) {
-                            try {
-                                MediaPlayer.getInstance().playNext();
-                            } catch (ArrayIndexOutOfBoundsException e1) {
+                            input.close();
+                            BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+                            bw.write(rest);
+                            bw.flush();
+                            bw.close();
+                            if (MediaPlayer.getInstance().getFilePath().equals(path)) {
+                                try {
+                                    MediaPlayer.getInstance().playNext();
+                                } catch (ArrayIndexOutOfBoundsException e1) {
 
+                                }
+                                MediaPlayer.getInstance().pause();
+                                MainFrame.getBottom().getFunction().playEnd();
+                                if (rest.equals("")) {
+                                    MediaPlayer.getInstance().init();
+                                }
                             }
-                            MediaPlayer.getInstance().pause();
-                            MainFrame.getBottom().getFunction().playEnd();
-                            if (rest.equals("")) {
-                                MediaPlayer.getInstance().init();
-                            }
+                            MainFrame.rebuildList();
+                        } catch (Exception e1) {
+                            e1.printStackTrace();
                         }
-                        MainFrame.rebuildList();
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
                     }
                 }
                 MainFrame.getFrame().requestFocus();

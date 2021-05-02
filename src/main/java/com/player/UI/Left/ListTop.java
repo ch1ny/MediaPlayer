@@ -27,12 +27,9 @@ public class ListTop extends JPanel {
 
     public ListTop() {
         setLayout(null);
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        double width = screenSize.getWidth();
-        setBounds(0,0, (int) (width * 0.8 * 0.2), 50);
-        setBackground(new Color(100,100,100));
+        setBounds(0,0, (int) (MainFrame.getFrame().getWidth() * 0.2), 50);
         add = new Add();
-        add.setBounds(0,0,300,50);
+        add.setBounds(0,0,(int) (MainFrame.getFrame().getWidth() * 0.2),50);
         add(add);
     }
 
@@ -56,7 +53,6 @@ public class ListTop extends JPanel {
                 public void mouseClicked(MouseEvent e) {
                     try {
                         setBackground(new Color(100,100,100));
-                        add.getParent().setBackground(new Color(100,100,100));
                         addSong();
                         MainFrame.rebuildList();
                     } catch (Exception e1) {
@@ -67,13 +63,11 @@ public class ListTop extends JPanel {
                 @Override
                 public void mouseEntered(MouseEvent e) {
                     setBackground(new Color(155,155,155));
-                    add.getParent().setBackground(new Color(155,155,155));
                 }
 
                 @Override
                 public void mouseExited(MouseEvent e) {
                     setBackground(new Color(100,100,100));
-                    add.getParent().setBackground(new Color(100,100,100));
                 }
             });
             add(btn);

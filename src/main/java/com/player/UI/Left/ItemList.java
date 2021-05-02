@@ -22,7 +22,7 @@ public class ItemList extends JPanel {
         int num = media.size();
         for (int i = 0; i < num; i++) {
             Item item = new Item((String) media.get(i));
-            item.setBounds(0, 50 * i, 300, 50);
+            item.setBounds(0, 50 * i, (int) (MainFrame.getFrame().getWidth() * 0.2), 50);
             add(item);
         }
         setVisible(true);

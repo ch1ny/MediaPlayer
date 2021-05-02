@@ -1,5 +1,7 @@
 package com.player.UI.View;
 
+import com.player.MainFrame;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -8,11 +10,8 @@ public class CoverView extends JPanel {
     private static BufferedImage image;
 
     public CoverView() {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        double width = screenSize.getWidth(); // 得到宽
-        double height = screenSize.getHeight(); // 得到高
         setLayout(null);
-        setBounds(0,0,(int) (width * 0.8 * 0.8), (int) (height * 0.8 * 0.85));
+        setBounds(0,0,(int) (MainFrame.getFrame().getWidth() * 0.8), (int) (MainFrame.getFrame().getHeight() * 0.85));
         setVisible(true);
     }
 

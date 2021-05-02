@@ -6,7 +6,6 @@ import java.awt.event.*;
 import java.io.IOException;
 
 import com.player.Player.MediaPlayer;
-import com.player.Player.MediaPlayer;
 import com.player.UI.Left.List;
 
 import com.player.UI.Bottom.Bottom;
@@ -14,7 +13,6 @@ import com.player.UI.View.ViewPanel;
 import com.player.Util.JudgeMoV;
 import com.sun.jna.NativeLibrary;
 import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
-import uk.co.caprica.vlcj.player.embedded.DefaultAdaptiveRuntimeFullScreenStrategy;
 import uk.co.caprica.vlcj.runtime.RuntimeUtil;
 
 public class MainFrame extends JFrame {
@@ -33,30 +31,30 @@ public class MainFrame extends JFrame {
         return view;
     }
 
-    public MainFrame() throws IOException {
+    public MainFrame() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double width = screenSize.getWidth();//得到宽
         double height = screenSize.getHeight();//得到高
         frame = new JFrame("Media Player");
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize((int) (width * 0.8), (int) (height * 0.8));
+        frame.setSize((int) (width * 0.9), (int) (height * 0.9));
         frame.setLocationRelativeTo(null);//窗体居中显示
         frame.setLayout(null);
         frame.setIconImage(Toolkit.getDefaultToolkit().createImage("res/icon/music.png"));
         frame.setVisible(true);
         bottom = new Bottom();
-        bottom.setBounds(0,(int) (height * 0.8 * 0.85),(int) (width * 0.8), (int) (height * 0.8 * 0.15));
+        bottom.setBounds(0,(int) (height * 0.9 * 0.85),(int) (width * 0.9), (int) (height * 0.9 * 0.15));
         frame.add(bottom);
         list = new List();
-        list.setBounds(0,0,(int) (width * 0.8 * 0.2),(int) (height * 0.8 * 0.85));
+        list.setBounds(0,0,(int) (width * 0.9 * 0.2),(int) (height * 0.9 * 0.85));
         frame.add(list);
         NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), "res/libvlc");
         video = new EmbeddedMediaPlayerComponent();
-        video.setBounds((int) (width * 0.8 * 0.2), 0, (int) (width * 0.8 * 0.8), (int) (height * 0.8 * 0.85));
+        video.setBounds((int) (width * 0.9 * 0.2), 0, (int) (width * 0.9 * 0.8), (int) (height * 0.9 * 0.85));
         frame.add(video);
         view = new ViewPanel();
-        view.setBounds((int) (width * 0.8 * 0.2), 0, (int) (width * 0.8 * 0.8), (int) (height * 0.8 * 0.85));
+        view.setBounds((int) (width * 0.9 * 0.2), 0, (int) (width * 0.9 * 0.8), (int) (height * 0.9 * 0.85));
         frame.add(view);
         FocusInit();
         KeyController();
@@ -173,6 +171,9 @@ public class MainFrame extends JFrame {
                                         }
                                         break;
                                 }
+                                break;
+                            case KeyEvent.VK_TAB:
+                                frame.requestFocus();
                                 break;
                         }
                     }
