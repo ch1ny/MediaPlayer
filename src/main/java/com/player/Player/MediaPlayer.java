@@ -351,6 +351,10 @@ public class MediaPlayer {
             double time = percent * totalTime;
             Process.getInstance().setProcess((int) time);
         }
+
+        public Clip getClip() {
+            return clip;
+        }
     }
 
     private static class VideoThread extends Thread {
@@ -401,6 +405,10 @@ public class MediaPlayer {
 
     public MusicThread getMusic() {
         return music;
+    }
+
+    public Clip getClip() {
+        return music.getClip();
     }
 
     public VideoThread getVideo() {

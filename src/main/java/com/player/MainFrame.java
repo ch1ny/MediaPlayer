@@ -1,5 +1,6 @@
 package com.player;
 
+import javax.sound.sampled.FloatControl;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -11,6 +12,7 @@ import com.player.UI.Left.List;
 import com.player.UI.Bottom.Bottom;
 import com.player.UI.View.ViewPanel;
 import com.player.Util.JudgeMoV;
+import com.player.Util.Volume;
 import com.sun.jna.NativeLibrary;
 import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
 import uk.co.caprica.vlcj.runtime.RuntimeUtil;
@@ -22,6 +24,7 @@ public class MainFrame extends JFrame {
     private static ViewPanel view;
     private static EmbeddedMediaPlayerComponent video;
     private static List list;
+    private static Volume vol;
 
     public static Bottom getBottom() {
         return bottom;
@@ -49,6 +52,8 @@ public class MainFrame extends JFrame {
         list = new List();
         list.setBounds(0,0,(int) (width * 0.9 * 0.2),(int) (height * 0.9 * 0.85));
         frame.add(list);
+        vol = new Volume();
+        frame.add(vol);
         NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), "res/libvlc");
         video = new EmbeddedMediaPlayerComponent();
         video.setBounds((int) (width * 0.9 * 0.2), 0, (int) (width * 0.9 * 0.8), (int) (height * 0.9 * 0.85));
@@ -56,8 +61,9 @@ public class MainFrame extends JFrame {
         view = new ViewPanel();
         view.setBounds((int) (width * 0.9 * 0.2), 0, (int) (width * 0.9 * 0.8), (int) (height * 0.9 * 0.85));
         frame.add(view);
+
         FocusInit();
-        KeyController();
+        FrameController();
     }
 
     public static JFrame getFrame() {
@@ -84,7 +90,7 @@ public class MainFrame extends JFrame {
         frame.setFocusable(true);
     }
 
-    private void KeyController() {
+    private void FrameController() {
         frame.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -172,11 +178,114 @@ public class MainFrame extends JFrame {
                                         break;
                                 }
                                 break;
+                            case KeyEvent.VK_UP:
+                                if (MediaPlayer.getInstance().getMoV() == JudgeMoV.VIDEO) {
+                                    int volume = video.getMediaPlayer().getVolume();
+                                    volume += 50;
+                                    if (volume > 500) {
+                                        volume = 500;
+                                    }
+                                    video.getMediaPlayer().setVolume(volume);
+                                    vol.setVolume(volume / 5);
+                                } else {
+                                    FloatControl gainControl = (FloatControl) MediaPlayer.getInstance().getClip().getControl(FloatControl.Type.MASTER_GAIN);
+                                    float max = gainControl.getMaximum();
+                                    float min = gainControl.getMinimum();
+                                    float distance = max - min;
+                                    float now = gainControl.getValue();
+                                    now += distance / 10;
+                                    if (now > max) {
+                                        now = max;
+                                    }
+                                    gainControl.setValue(now);
+                                    int percent = (int) (((now - min) / distance) * 100);
+                                    vol.setVolume(percent);
+                                }
+                                break;
+                            case KeyEvent.VK_DOWN:
+                                if (MediaPlayer.getInstance().getMoV() == JudgeMoV.VIDEO) {
+                                    int volume = video.getMediaPlayer().getVolume();
+                                    volume -= 50;
+                                    if (volume < 0) {
+                                        volume = 0;
+                                    }
+                                    video.getMediaPlayer().setVolume(volume);
+                                    vol.setVolume(volume / 5);
+                                } else {
+                                    FloatControl gainControl = (FloatControl) MediaPlayer.getInstance().getClip().getControl(FloatControl.Type.MASTER_GAIN);
+                                    float max = gainControl.getMaximum();
+                                    float min = gainControl.getMinimum();
+                                    float distance = max - min;
+                                    float now = gainControl.getValue();
+                                    now -= distance / 10;
+                                    if (now < min) {
+                                        now = min;
+                                    }
+                                    gainControl.setValue(now);
+                                    int percent = (int) (((now - min) / distance) * 100);
+                                    vol.setVolume(percent);
+                                }
+                                break;
                             case KeyEvent.VK_TAB:
                                 frame.requestFocus();
                                 break;
                         }
                     }
+                }
+            }
+        });
+        frame.addMouseWheelListener(new MouseAdapter() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                switch (e.getWheelRotation()) {
+                    case -1:
+                        if (MediaPlayer.getInstance().getMoV() == JudgeMoV.VIDEO) {
+                            int volume = video.getMediaPlayer().getVolume();
+                            volume += e.getScrollAmount() * 5;
+                            if (volume > 500) {
+                                volume = 500;
+                            }
+                            video.getMediaPlayer().setVolume(volume);
+                            vol.setVolume(volume / 5);
+                        } else {
+                            FloatControl gainControl = (FloatControl) MediaPlayer.getInstance().getClip().getControl(FloatControl.Type.MASTER_GAIN);
+                            float max = gainControl.getMaximum();
+                            float min = gainControl.getMinimum();
+                            float distance = max - min;
+                            float now = gainControl.getValue();
+                            now += (distance / 100) * e.getScrollAmount();
+                            if (now > max) {
+                                now = max;
+                            }
+                            gainControl.setValue(now);
+                            int percent = (int) (((now - min) / distance) * 100);
+                            vol.setVolume(percent);
+                        }
+                        break;
+                    case 1:
+                        if (MediaPlayer.getInstance().getMoV() == JudgeMoV.VIDEO) {
+                            int volume = video.getMediaPlayer().getVolume();
+                            volume -= e.getScrollAmount() * 5;
+                            if (volume < 0) {
+                                volume = 0;
+                            }
+                            video.getMediaPlayer().setVolume(volume);
+                            vol.setVolume(volume / 5);
+                        } else {
+                            FloatControl gainControl = (FloatControl) MediaPlayer.getInstance().getClip().getControl(FloatControl.Type.MASTER_GAIN);
+                            float max = gainControl.getMaximum();
+                            float min = gainControl.getMinimum();
+                            float distance = max - min;
+                            float now = gainControl.getValue();
+                            now -= (distance / 100) * e.getScrollAmount();
+                            if (now < min) {
+                                now = min;
+                            }
+                            gainControl.setValue(now);
+                            int percent = (int) (((now - min) / distance) * 100);
+                            vol.setVolume(percent);
+                        }
+                        break;
                 }
             }
         });
