@@ -22,7 +22,7 @@ public class List extends JPanel {
         jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane.getVerticalScrollBar().setUnitIncrement(15);
         jScrollPane.getVerticalScrollBar().setUI(new ScrollBarStyle());
-        jScrollPane.setBounds(0, 50, (int) (width * 0.8 * 0.2), (int) (height * 0.8 * 0.85));
+        jScrollPane.setBounds(0, 50, (int) (width * 0.8 * 0.2), (int) (height * 0.8 * 0.85 - 50));
         jScrollPane.setViewportView(itemList);
         jScrollPane.setBorder(null);
         add(top);

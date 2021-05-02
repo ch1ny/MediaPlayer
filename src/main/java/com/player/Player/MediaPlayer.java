@@ -9,7 +9,6 @@
 
 package com.player.Player;
 
-import com.player.Main;
 import com.player.MainFrame;
 import com.player.UI.Bottom.Bottom;
 import com.player.UI.Bottom.FileName;
@@ -136,6 +135,7 @@ public class MediaPlayer {
             time = totalTime * 1000;
         }
         video.jump(time);
+        video.go_on();
     }
 
     public static void playEnd() throws UnsupportedAudioFileException, IOException, LineUnavailableException, ReadOnlyFileException, TagException, InvalidAudioFrameException, CannotReadException {
@@ -293,7 +293,7 @@ public class MediaPlayer {
         return true;
     }
 
-    // 禁用 jaudiotagger 的Logger
+    // 禁用 jaudiotagger 的 Logger
     private static void disabledLogger() {
         AudioFileIO.logger.setLevel(Level.OFF);
         AbstractID3v2Tag.logger.setLevel(Level.OFF);

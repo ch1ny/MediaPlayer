@@ -39,14 +39,14 @@ public class ScrollBarStyle extends BasicScrollBarUI {
     protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
         g.translate(thumbBounds.x, thumbBounds.y);// 这句一定要加上，不然拖动就失效了
         g.setColor(new Color(155,155,155));// 设置把手颜色
-        g.drawRoundRect(0, 0, 5, thumbBounds.height - 50, 5, 5);
+        g.drawRoundRect(0, 0, 5, thumbBounds.height, 5, 5);
         // 消除锯齿
         Graphics2D g2 = (Graphics2D) g;
         RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.addRenderingHints(rh);
         // 半透明
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-        g2.fillRoundRect(0, 0, 40, thumbBounds.height - 50, 5, 5);
+        g2.fillRoundRect(0, 0, 40, thumbBounds.height, 5, 5);
     }
 
     @Override

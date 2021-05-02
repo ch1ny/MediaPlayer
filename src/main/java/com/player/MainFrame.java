@@ -143,7 +143,7 @@ public class MainFrame extends JFrame {
                                         if (MediaPlayer.getInstance().getVideo() != null) {
                                             Bottom.getFunction().playBegin();
                                             long now = MainFrame.getVideo().getMediaPlayer().getTime();
-                                            now += 10000;
+                                            now += 3000;
                                             MediaPlayer.getInstance().jump(now);
                                         }
                                         break;
@@ -168,7 +168,7 @@ public class MainFrame extends JFrame {
                                         if (MediaPlayer.getInstance().getVideo() != null) {
                                             Bottom.getFunction().playBegin();
                                             long now = MainFrame.getVideo().getMediaPlayer().getTime();
-                                            now -= 10000;
+                                            now -= 3000;
                                             MediaPlayer.getInstance().jump(now);
                                         }
                                         break;

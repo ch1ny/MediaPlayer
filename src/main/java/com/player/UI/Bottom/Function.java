@@ -108,7 +108,7 @@ public class Function extends JPanel {
                             if (MediaPlayer.getInstance().getVideo() != null) {
                                 play.setIcon(new ImageIcon(new ImageIcon("res/icon/pause.png").getImage().getScaledInstance((int) (height * 0.08 - 40),(int) (height * 0.08 - 40), Image.SCALE_SMOOTH)));
                                 long now = MainFrame.getVideo().getMediaPlayer().getTime();
-                                now += 10000;
+                                now += 3000;
                                 MediaPlayer.getInstance().jump(now);
                             }
                             break;
@@ -142,7 +142,7 @@ public class Function extends JPanel {
                             if (MediaPlayer.getInstance().getVideo() != null) {
                                 play.setIcon(new ImageIcon(new ImageIcon("res/icon/pause.png").getImage().getScaledInstance((int) (height * 0.08 - 40),(int) (height * 0.08 - 40), Image.SCALE_SMOOTH)));
                                 long now = MainFrame.getVideo().getMediaPlayer().getTime();
-                                now -= 10000;
+                                now -= 3000;
                                 MediaPlayer.getInstance().jump(now);
                             }
                             break;
