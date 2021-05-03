@@ -13,17 +13,24 @@ import java.util.Scanner;
 public class Item extends JPanel {
     private JLabel title;
     private String path;
+    private int isOdd; // 1是奇数，0是偶数
 
-    public Item(final String name) {
+    public Item(String name, int num) {
         setBackground(new Color(255,255,255));
         setLayout(null);
         path = name;
+        isOdd = num;
         title = new JLabel(name.substring(name.lastIndexOf("\\") + 1, name.lastIndexOf(".")), JLabel.LEFT);
         title.setVisible(true);
         title.setBounds(20, 0, (int) (MainFrame.getFrame().getWidth() * 0.2), 50);
         title.setForeground(Color.BLACK);
         title.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add(title);
+        if (isOdd == 1) {
+            setBackground(new Color(255,255,255));
+        } else {
+            setBackground(new Color(230,230,255));
+        }
         JButton btn = new PlayerTextButton("");
         btn.setBounds(0, 0, (int) (MainFrame.getFrame().getWidth() * 0.2), 50);
         btn.setContentAreaFilled(false);
@@ -91,7 +98,11 @@ public class Item extends JPanel {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                setBackground(new Color(255,255,255));
+                if (isOdd == 1) {
+                    setBackground(new Color(255,255,255));
+                } else {
+                    setBackground(new Color(230,230,255));
+                }
             }
         });
     }

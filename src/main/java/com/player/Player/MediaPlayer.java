@@ -138,7 +138,7 @@ public class MediaPlayer {
         video.go_on();
     }
 
-    public static void playEnd() throws UnsupportedAudioFileException, IOException, LineUnavailableException, ReadOnlyFileException, TagException, InvalidAudioFrameException, CannotReadException {
+    public static void playEnd() throws UnsupportedAudioFileException, IOException, LineUnavailableException, ReadOnlyFileException, TagException, InvalidAudioFrameException, CannotReadException, InterruptedException {
         isPlaying = false;
         playNext();
     }
@@ -376,7 +376,9 @@ public class MediaPlayer {
         }
 
         private void pause() {
-            player.getMediaPlayer().pause();
+            if (isPlaying) {
+                player.getMediaPlayer().pause();
+            }
             Process.getInstance().pause();
         }
 

@@ -191,7 +191,7 @@ public class Function extends JPanel {
                     } else if (time < 0) {
                         time = 0;
                     }
-                    setCurrent((int) time);
+                    Process.getInstance().setProcess((int) (time));
                 }
             }
         });

@@ -16,15 +16,15 @@ public class ItemList extends JPanel {
 
     public ItemList() {
         setLayout(null);
-        setBackground(new Color(255,255,255));
         Vector media;
         media = getFileList();
         int num = media.size();
         for (int i = 0; i < num; i++) {
-            Item item = new Item((String) media.get(i));
+            Item item = new Item((String) media.get(i), i % 2);
             item.setBounds(0, 50 * i, (int) (MainFrame.getFrame().getWidth() * 0.2), 50);
             add(item);
         }
+        setBackground(new Color(255,255,255));
         setVisible(true);
         setPreferredSize(new Dimension((int) (MainFrame.getFrame().getWidth() * 0.2), 50 * num));
     }
