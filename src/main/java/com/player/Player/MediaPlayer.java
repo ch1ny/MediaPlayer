@@ -329,6 +329,7 @@ public class MediaPlayer {
             try {
                 clip.setFramePosition(frame);
                 clip.start();
+                Process.getInstance().go_on();
             } catch (Exception e) {
                 e.printStackTrace();
             }

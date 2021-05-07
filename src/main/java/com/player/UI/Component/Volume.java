@@ -1,4 +1,4 @@
-package com.player.Util;
+package com.player.UI.Component;
 
 import com.player.MainFrame;
 

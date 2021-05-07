@@ -8,6 +8,7 @@ public class Process {
     private int totalLength;
     private static Process process = new Process();
     private ProcessThread processThread;
+    private int sleep = 1000;
 
     public static Process getInstance() {
         return process;
@@ -46,7 +47,7 @@ public class Process {
 
     public void changeMedia(int length) {
         totalLength = length;
-        processThread = new ProcessThread(0, this.totalLength);
+        processThread = new ProcessThread(0, totalLength);
         processThread.start();
         pause();
     }
@@ -73,7 +74,7 @@ public class Process {
                     }
                     function.setPlayProcessSlider(current * 100 / totalLength);
                     current += 1;
-                    Thread.sleep(1000);
+                    Thread.sleep(sleep);
                 }
                 function.setCurrent(0);
                 function.setPlayProcessSlider(0);
@@ -83,7 +84,10 @@ public class Process {
             }
         }
 
+    }
 
+    public void setSleep(float rate) {
+        sleep = (int) (1000 / rate);
     }
 
 }

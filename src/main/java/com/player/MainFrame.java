@@ -4,18 +4,18 @@ import javax.sound.sampled.FloatControl;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.Vector;
 
 import com.player.Player.MediaPlayer;
+import com.player.Player.Process;
 import com.player.UI.Left.List;
 
 import com.player.UI.Bottom.Bottom;
 import com.player.UI.View.ViewPanel;
 import com.player.Util.JudgeMoV;
+import com.player.UI.Component.Rate;
 import com.player.Util.VideoClickListener;
-import com.player.Util.Volume;
+import com.player.UI.Component.Volume;
 import com.sun.jna.NativeLibrary;
 import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
 import uk.co.caprica.vlcj.runtime.RuntimeUtil;
@@ -28,6 +28,8 @@ public class MainFrame extends JFrame {
     private static EmbeddedMediaPlayerComponent video;
     private static List list;
     private static Volume vol;
+    private static Rate r;
+    private static Vector<Float> Rates = new Vector<Float>();
 
     public static Bottom getBottom() {
         return bottom;
@@ -35,6 +37,10 @@ public class MainFrame extends JFrame {
 
     public static ViewPanel getView() {
         return view;
+    }
+
+    public static List getList() {
+        return list;
     }
 
     public MainFrame() {
@@ -57,6 +63,8 @@ public class MainFrame extends JFrame {
         frame.add(list);
         vol = new Volume();
         frame.add(vol);
+        r = new Rate();
+        frame.add(r);
         NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), "res/libvlc");
         video = new EmbeddedMediaPlayerComponent();
         video.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -65,7 +73,7 @@ public class MainFrame extends JFrame {
         view = new ViewPanel();
         view.setBounds((int) (width * 0.9 * 0.2), 0, (int) (width * 0.9 * 0.8), (int) (height * 0.9 * 0.85));
         frame.add(view);
-
+        RateInit();
         FocusInit();
         FrameController();
     }
@@ -94,7 +102,18 @@ public class MainFrame extends JFrame {
         frame.setFocusable(true);
     }
 
-    private void FrameController() {
+    private void RateInit() {
+        Rates.add(0.5f);
+        Rates.add(0.75f);
+        Rates.add(1.0f);
+        Rates.add(1.25f);
+        Rates.add(1.5f);
+        Rates.add(2.0f);
+        Rates.add(2.5f);
+        Rates.add(3.0f);
+    }
+
+    private static void FrameController() {
         frame.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -115,6 +134,37 @@ public class MainFrame extends JFrame {
                                     e1.printStackTrace();
                                 }
                                 break;
+                        }
+                    } else if (e.isShiftDown()) {
+                        if (MediaPlayer.getInstance().getMoV() == 1) {
+                            switch (e.getKeyCode()) {
+                                case KeyEvent.VK_RIGHT:
+                                    try {
+                                        float rate = video.getMediaPlayer().getRate();
+                                        int index = Rates.indexOf(rate);
+                                        if (index != Rates.size() - 1) {
+                                            video.getMediaPlayer().setRate(Rates.get(index + 1));
+                                            Process.getInstance().setSleep(Rates.get(index + 1));
+                                        }
+                                        r.setRate(video.getMediaPlayer().getRate());
+                                    } catch (Exception e1) {
+                                        e1.printStackTrace();
+                                    }
+                                    break;
+                                case KeyEvent.VK_LEFT:
+                                    try {
+                                        float rate = video.getMediaPlayer().getRate();
+                                        int index = Rates.indexOf(rate);
+                                        if (index != 0) {
+                                            video.getMediaPlayer().setRate(Rates.get(index - 1));
+                                            Process.getInstance().setSleep(Rates.get(index - 1));
+                                        }
+                                        r.setRate(video.getMediaPlayer().getRate());
+                                    } catch (Exception e1) {
+                                        e1.printStackTrace();
+                                    }
+                                    break;
+                            }
                         }
                     } else {
                         switch (e.getKeyCode()) {

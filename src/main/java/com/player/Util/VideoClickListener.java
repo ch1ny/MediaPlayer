@@ -38,7 +38,6 @@ public class VideoClickListener extends MouseAdapter {
         }
         //新建定时器，双击检测间隔为300ms
         Timer timer = new Timer();
-
         timer.schedule(new TimerTask() {
             //指示定时器执行次数
             int num = 0;
@@ -65,6 +64,7 @@ public class VideoClickListener extends MouseAdapter {
             }
         },new Date(), 300);
     }
+
     protected void mouseClickedOnce(MouseEvent me) {
         // 单击事件
         MediaPlayer player = MediaPlayer.getInstance();
@@ -81,12 +81,13 @@ public class VideoClickListener extends MouseAdapter {
         }
         MainFrame.getFrame().requestFocus();
     }
+
     private void mouseClickedTwice(MouseEvent me) {
         // 双击事件
 //        EmbeddedMediaPlayerComponent video = MainFrame.getVideo();
 //        EmbeddedMediaPlayer player = video.getMediaPlayer();
-//        player.setFullScreenStrategy(new Win32FullScreenStrategy(this));
-//        player.to
-//        MainFrame.getFrame().requestFocus();
+//        player.setFullScreenStrategy(new Win32FullScreenStrategy(player.getOverlay()));
+//        player.toggleFullScreen();
+        MainFrame.getFrame().requestFocus();
     }
 }
