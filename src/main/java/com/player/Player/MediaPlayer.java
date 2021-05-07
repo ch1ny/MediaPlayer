@@ -149,7 +149,7 @@ public class MediaPlayer {
         Bottom.getFunction().playBegin();
     }
 
-    public void playPrev() throws TagException, ReadOnlyFileException, CannotReadException, InvalidAudioFrameException, IOException, LineUnavailableException, UnsupportedAudioFileException {
+    public static void playPrev() throws TagException, ReadOnlyFileException, CannotReadException, InvalidAudioFrameException, IOException, LineUnavailableException, UnsupportedAudioFileException {
         filePath = getMediaName(-1);
         play(filePath);
         Bottom.getFunction().playBegin();

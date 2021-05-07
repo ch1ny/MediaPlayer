@@ -56,6 +56,15 @@ public class Item extends JPanel {
                     if (confirm == 0) {
                         File file = new File("res/media");
                         try {
+                            if (MediaPlayer.getInstance().getFilePath().equals(path)) {
+                                try {
+                                    MediaPlayer.getInstance().playNext();
+                                } catch (ArrayIndexOutOfBoundsException e1) {
+
+                                }
+                                MediaPlayer.getInstance().pause();
+                                MainFrame.getBottom().getFunction().playEnd();
+                            }
                             FileInputStream input = new FileInputStream(file);
                             Scanner sc = new Scanner(input);
                             String rest = "";
@@ -70,17 +79,8 @@ public class Item extends JPanel {
                             bw.write(rest);
                             bw.flush();
                             bw.close();
-                            if (MediaPlayer.getInstance().getFilePath().equals(path)) {
-                                try {
-                                    MediaPlayer.getInstance().playNext();
-                                } catch (ArrayIndexOutOfBoundsException e1) {
-
-                                }
-                                MediaPlayer.getInstance().pause();
-                                MainFrame.getBottom().getFunction().playEnd();
-                                if (rest.equals("")) {
-                                    MediaPlayer.getInstance().init();
-                                }
+                            if (rest.equals("")) {
+                                MediaPlayer.getInstance().init();
                             }
                             MainFrame.rebuildList();
                         } catch (Exception e1) {

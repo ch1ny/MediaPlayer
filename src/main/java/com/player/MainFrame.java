@@ -4,7 +4,9 @@ import javax.sound.sampled.FloatControl;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.player.Player.MediaPlayer;
 import com.player.UI.Left.List;
@@ -12,6 +14,7 @@ import com.player.UI.Left.List;
 import com.player.UI.Bottom.Bottom;
 import com.player.UI.View.ViewPanel;
 import com.player.Util.JudgeMoV;
+import com.player.Util.VideoClickListener;
 import com.player.Util.Volume;
 import com.sun.jna.NativeLibrary;
 import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
@@ -56,6 +59,7 @@ public class MainFrame extends JFrame {
         frame.add(vol);
         NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), "res/libvlc");
         video = new EmbeddedMediaPlayerComponent();
+        video.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         video.setBounds((int) (width * 0.9 * 0.2), 0, (int) (width * 0.9 * 0.8), (int) (height * 0.9 * 0.85));
         frame.add(video);
         view = new ViewPanel();
@@ -289,6 +293,20 @@ public class MainFrame extends JFrame {
                 }
             }
         });
+        frame.addWindowListener(new WindowAdapter() {
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+                frame.requestFocus();
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+                frame.requestFocus();
+            }
+        });
+
+        video.getVideoSurface().addMouseListener(new VideoClickListener());
     }
 
     public static EmbeddedMediaPlayerComponent getVideo() {

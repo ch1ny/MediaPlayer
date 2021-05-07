@@ -48,6 +48,7 @@ public class Process {
         totalLength = length;
         processThread = new ProcessThread(0, this.totalLength);
         processThread.start();
+        pause();
     }
 
     //进度条线程
