@@ -39,10 +39,6 @@ public class MainFrame extends JFrame {
         return view;
     }
 
-    public static List getList() {
-        return list;
-    }
-
     public MainFrame() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double width = screenSize.getWidth();//得到宽
@@ -65,7 +61,7 @@ public class MainFrame extends JFrame {
         frame.add(vol);
         r = new Rate();
         frame.add(r);
-        NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), "res/libvlc");
+        NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), "libvlc");
         video = new EmbeddedMediaPlayerComponent();
         video.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         video.setBounds((int) (width * 0.9 * 0.2), 0, (int) (width * 0.9 * 0.8), (int) (height * 0.9 * 0.85));

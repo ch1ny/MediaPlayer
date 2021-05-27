@@ -34,6 +34,7 @@ public class ItemList extends JPanel {
         if (!media.exists()) {
             try {
                 media.createNewFile();
+                media.setReadOnly();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -44,8 +45,9 @@ public class ItemList extends JPanel {
             Vector list = new Vector();
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
-                if (AudioFormat.endWith(line) || VideoFormat.endWith(line))
+                if (AudioFormat.endWith(line) || VideoFormat.endWith(line)) {
                     list.add(line);
+                }
             }
             return list;
         } catch (Exception e) {

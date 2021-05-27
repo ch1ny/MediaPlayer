@@ -89,24 +89,27 @@ public class ListTop extends JPanel {
                     JOptionPane.showMessageDialog(null,"文件格式不支持！！", "文件不支持", 0);
                     return;
                 }
-                File audio = new File("res/media");
-                FileInputStream input = new FileInputStream(audio);
+                File media = new File("res/media");
+                media.setWritable(true);
+                FileInputStream input = new FileInputStream(media);
                 Scanner sc = new Scanner(input);
                 String had = "";
                 while (sc.hasNextLine()) {
                     String line = sc.nextLine();
                     if (path.equals(line)) {
                         JOptionPane.showMessageDialog(null,"播放列表中已存在该曲目！", "请勿重复添加", 0);
+                        media.setReadOnly();
                         return;
                     } else {
                         had += "\n" + line;
                     }
                 }
                 input.close();
-                BufferedWriter bw = new BufferedWriter(new FileWriter(audio));
+                BufferedWriter bw = new BufferedWriter(new FileWriter(media));
                 bw.write(path + had);
                 bw.flush();
                 bw.close();
+                media.setReadOnly();
                 if (had.equals("")) {
                     MediaPlayer.getInstance().init();
                 }
