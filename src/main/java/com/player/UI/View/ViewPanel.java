@@ -3,6 +3,7 @@ package com.player.UI.View;
 import javax.swing.*;
 
 public class ViewPanel extends JPanel {
+
     private static CoverView coverView;
 
     public ViewPanel() {

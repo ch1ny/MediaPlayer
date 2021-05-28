@@ -20,23 +20,23 @@ public class Rate extends JPanel {
 
     public Rate() {
         setLayout(null);
-        setBounds((int) (MainFrame.getFrame().getWidth() * 0.55),
-                (int) (MainFrame.getFrame().getHeight() * 0.35),
-                (int) (MainFrame.getFrame().getWidth() * 0.1),
-                (int) (MainFrame.getFrame().getHeight() * 0.15)
-        );
         setBackground(new Color(100,100,100));
         rate = new JLabel("", JLabel.CENTER);
         rate.setForeground(new Color(255,255,255));
         rate.setVisible(true);
         rate.setFont(new Font(Font.DIALOG, 0, 25));
-        rate.setBounds(0, 0, (int) (MainFrame.getFrame().getWidth() * 0.1), (int) (MainFrame.getFrame().getHeight() * 0.15));
         add(rate);
         setVisible(false);
     }
 
     public void setRate(float rate) {
         this.rate.setText(rate + "x");
+        int x = (int) (MainFrame.getVideo().getWidth() * 0.45 + MainFrame.getVideo().getX());
+        int y = (int) (MainFrame.getVideo().getHeight() * 0.45);
+        int width = (int) (MainFrame.getVideo().getWidth() * 0.1);
+        int height = (int) (MainFrame.getVideo().getHeight() * 0.1);
+        setBounds(x, y, width, height);
+        this.rate.setBounds(0, 0, width, height);
         setVisible(true);
         ActionListener hide = new ActionListener() {
             @Override

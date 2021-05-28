@@ -1,14 +1,10 @@
 package com.player.Util;
 
-import com.player.Main;
 import com.player.MainFrame;
 import com.player.Player.MediaPlayer;
 import com.player.UI.Bottom.Bottom;
 import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
-import uk.co.caprica.vlcj.player.MediaPlayerFactory;
-import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
-import uk.co.caprica.vlcj.player.embedded.windows.Win32FullScreenStrategy;
-
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Date;
@@ -25,15 +21,13 @@ public class VideoClickListener extends MouseAdapter {
     private static int clickNum = 1;		//指示鼠标点击次数，默认为单击
     @Override
     public void mouseClicked(MouseEvent e) {
-        // TODO Auto-generated method stub
-        final MouseEvent me = e;
-        VideoClickListener.flag= false;
-        if (VideoClickListener.clickNum==2) {
+        VideoClickListener.flag = false;
+        if (VideoClickListener.clickNum == 2) {
             //鼠标点击次数为2调用双击事件
-            this.mouseClickedTwice(me);
+            this.mouseClickedTwice();
             //调用完毕clickNum置为1
-            VideoClickListener.clickNum=1;
-            VideoClickListener.flag=true;
+            VideoClickListener.clickNum = 1;
+            VideoClickListener.flag = true;
             return;
         }
         //新建定时器，双击检测间隔为300ms
@@ -45,27 +39,27 @@ public class VideoClickListener extends MouseAdapter {
             public void run() {
                 // 双击事件已经执行，取消定时器任务
                 if(VideoClickListener.flag) {
-                    num=0;
-                    VideoClickListener.clickNum=1;
+                    num = 0;
+                    VideoClickListener.clickNum = 1;
                     this.cancel();
                     return;
                 }
                 //定时器再次执行，调用单击事件，然后取消定时器任务
-                if (num==1) {
-                    mouseClickedOnce(me);
-                    VideoClickListener.flag=true;
-                    VideoClickListener.clickNum=1;
-                    num=0;
+                if (num == 1) {
+                    mouseClickedOnce();
+                    VideoClickListener.flag = true;
+                    VideoClickListener.clickNum = 1;
+                    num = 0;
                     this.cancel();
                     return;
                 }
                 clickNum++;
                 num++;
             }
-        },new Date(), 300);
+        },new Date(), 500);
     }
 
-    protected void mouseClickedOnce(MouseEvent me) {
+    protected void mouseClickedOnce() {
         // 单击事件
         MediaPlayer player = MediaPlayer.getInstance();
         if (player.isPlaying()) {
@@ -82,12 +76,27 @@ public class VideoClickListener extends MouseAdapter {
         MainFrame.getFrame().requestFocus();
     }
 
-    private void mouseClickedTwice(MouseEvent me) {
+    private void mouseClickedTwice() {
         // 双击事件
-//        EmbeddedMediaPlayerComponent video = MainFrame.getVideo();
-//        EmbeddedMediaPlayer player = video.getMediaPlayer();
-//        player.setFullScreenStrategy(new Win32FullScreenStrategy(player.getOverlay()));
-//        player.toggleFullScreen();
+        EmbeddedMediaPlayerComponent media = MainFrame.getVideo();
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        double width = screen.getWidth();
+        double height = screen.getHeight();
+        if (media.getMediaPlayer().isFullScreen()) {
+            MainFrame.getBottom().setVisible(true);
+            MainFrame.getList().setVisible(true);
+            media.setBounds((int) (width * 0.9 * 0.2), 0, (int) (width * 0.9 * 0.8), (int) (height * 0.9 * 0.85));
+            MainFrame.getView().setBounds((int) (width * 0.9 * 0.2), 0, (int) (width * 0.9 * 0.8), (int) (height * 0.9 * 0.85));
+            MainFrame.getView().getCover().setBounds(0, 0, (int) (width * 0.9 * 0.8), (int) (height * 0.9 * 0.85));
+            media.getMediaPlayer().setFullScreen(false);
+        } else {
+            MainFrame.getBottom().setVisible(false);
+            MainFrame.getList().setVisible(false);
+            media.setBounds(0,0, (int) width, (int) height);
+            MainFrame.getView().setBounds(0,0, (int) width, (int) height);
+            MainFrame.getView().getCover().setBounds(0,0, (int) width, (int) height);
+            media.getMediaPlayer().setFullScreen(true);
+        }
         MainFrame.getFrame().requestFocus();
     }
 }

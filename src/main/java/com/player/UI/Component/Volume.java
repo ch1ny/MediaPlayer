@@ -14,11 +14,6 @@ public class Volume extends JPanel {
 
     public Volume() {
         setLayout(null);
-        setBounds((int) (MainFrame.getFrame().getWidth() * 0.55),
-                (int) (MainFrame.getFrame().getHeight() * 0.35),
-                (int) (MainFrame.getFrame().getWidth() * 0.1),
-                (int) (MainFrame.getFrame().getHeight() * 0.15)
-        );
         setBackground(new Color(100,100,100));
         image = new JLabel();
         add(image);
@@ -26,28 +21,30 @@ public class Volume extends JPanel {
         volume.setForeground(new Color(255,255,255));
         volume.setVisible(true);
         volume.setFont(new Font(Font.DIALOG, 0, 25));
-        volume.setBounds(0, (int) (MainFrame.getFrame().getWidth() * 0.025), (int) (MainFrame.getFrame().getWidth() * 0.1), (int) (MainFrame.getFrame().getHeight() * 0.15));
         add(volume);
         setVisible(false);
     }
 
     public void setVolume(int vol) {
         Volume.super.remove(image);
+        int x = (int) (MainFrame.getVideo().getWidth() * 0.45 + MainFrame.getVideo().getX());
+        int y = (int) (MainFrame.getVideo().getHeight() * 0.4);
+        int width = (int) (MainFrame.getVideo().getWidth() * 0.1);
+        int height = (int) (MainFrame.getVideo().getHeight() * 0.2);
+        setBounds(x, y, width, height);
         if (vol <= 0) {
-            image = new JLabel(new ImageIcon(new ImageIcon("res/icon/mute.png").getImage().getScaledInstance((int) (MainFrame.getFrame().getWidth() * 0.03),(int) (MainFrame.getFrame().getWidth() * 0.03), Image.SCALE_SMOOTH)));
-            image.setBounds(0,-(int) (MainFrame.getFrame().getWidth() * 0.01),(int) (MainFrame.getFrame().getWidth() * 0.1),(int) (MainFrame.getFrame().getHeight() * 0.15));
+            image = new JLabel(new ImageIcon(new ImageIcon("res/icon/mute.png").getImage().getScaledInstance((int) (width * 0.3),(int) (width * 0.3), Image.SCALE_SMOOTH)));
         } else if (vol < 30) {
-            image = new JLabel(new ImageIcon(new ImageIcon("res/icon/volume0.png").getImage().getScaledInstance((int) (MainFrame.getFrame().getWidth() * 0.03),(int) (MainFrame.getFrame().getWidth() * 0.03), Image.SCALE_SMOOTH)));
-            image.setBounds(0,-(int) (MainFrame.getFrame().getWidth() * 0.01),(int) (MainFrame.getFrame().getWidth() * 0.1),(int) (MainFrame.getFrame().getHeight() * 0.15));
+            image = new JLabel(new ImageIcon(new ImageIcon("res/icon/volume0.png").getImage().getScaledInstance((int) (width * 0.3),(int) (width * 0.3), Image.SCALE_SMOOTH)));
         } else if (vol < 70) {
-            image = new JLabel(new ImageIcon(new ImageIcon("res/icon/volume1.png").getImage().getScaledInstance((int) (MainFrame.getFrame().getWidth() * 0.03),(int) (MainFrame.getFrame().getWidth() * 0.03), Image.SCALE_SMOOTH)));
-            image.setBounds(0,-(int) (MainFrame.getFrame().getWidth() * 0.01),(int) (MainFrame.getFrame().getWidth() * 0.1),(int) (MainFrame.getFrame().getHeight() * 0.15));
+            image = new JLabel(new ImageIcon(new ImageIcon("res/icon/volume1.png").getImage().getScaledInstance((int) (width * 0.3),(int) (width * 0.3), Image.SCALE_SMOOTH)));
         } else {
-            image = new JLabel(new ImageIcon(new ImageIcon("res/icon/volume2.png").getImage().getScaledInstance((int) (MainFrame.getFrame().getWidth() * 0.03),(int) (MainFrame.getFrame().getWidth() * 0.03), Image.SCALE_SMOOTH)));
-            image.setBounds(0,-(int) (MainFrame.getFrame().getWidth() * 0.01),(int) (MainFrame.getFrame().getWidth() * 0.1),(int) (MainFrame.getFrame().getHeight() * 0.15));
+            image = new JLabel(new ImageIcon(new ImageIcon("res/icon/volume2.png").getImage().getScaledInstance((int) (width * 0.3),(int) (width * 0.3), Image.SCALE_SMOOTH)));
         }
+        image.setBounds(0,-(int) (width * 0.2), width, height);
         Volume.super.repaint();
         Volume.super.add(image);
+        volume.setBounds(0, (int) (width * 0.25), width, height);
         volume.setText(String.valueOf(vol));
         Volume.super.setVisible(true);
         ActionListener hide = new ActionListener() {

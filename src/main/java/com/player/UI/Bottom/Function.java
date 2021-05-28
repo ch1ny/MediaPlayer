@@ -208,11 +208,13 @@ public class Function extends JPanel {
     }
 
     public void playBegin() {
-        this.play.setIcon(new ImageIcon(new ImageIcon("res/icon/pause.png").getImage().getScaledInstance((int) (MainFrame.getFrame().getHeight() * 0.1 - 40),(int) (MainFrame.getFrame().getHeight() * 0.1 - 40), Image.SCALE_SMOOTH)));
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        this.play.setIcon(new ImageIcon(new ImageIcon("res/icon/pause.png").getImage().getScaledInstance((int) (screen.getHeight() * 0.9 * 0.1 - 40),(int) (screen.getHeight() * 0.9 * 0.1 - 40), Image.SCALE_SMOOTH)));
     }
 
     public void playEnd() {
-        this.play.setIcon(new ImageIcon(new ImageIcon("res/icon/play.png").getImage().getScaledInstance((int) (MainFrame.getFrame().getHeight() * 0.1 - 40),(int) (MainFrame.getFrame().getHeight() * 0.1 - 40), Image.SCALE_SMOOTH)));
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        this.play.setIcon(new ImageIcon(new ImageIcon("res/icon/play.png").getImage().getScaledInstance((int) (screen.getHeight() * 0.9 * 0.1 - 40),(int) (screen.getHeight() * 0.9 * 0.1 - 40), Image.SCALE_SMOOTH)));
     }
 
     // 设置总时间，单位秒

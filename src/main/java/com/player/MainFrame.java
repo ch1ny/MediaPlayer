@@ -18,6 +18,7 @@ import com.player.Util.VideoClickListener;
 import com.player.UI.Component.Volume;
 import com.sun.jna.NativeLibrary;
 import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
+import uk.co.caprica.vlcj.player.embedded.DefaultAdaptiveRuntimeFullScreenStrategy;
 import uk.co.caprica.vlcj.runtime.RuntimeUtil;
 
 public class MainFrame extends JFrame {
@@ -33,6 +34,10 @@ public class MainFrame extends JFrame {
 
     public static Bottom getBottom() {
         return bottom;
+    }
+
+    public static List getList() {
+        return list;
     }
 
     public static ViewPanel getView() {
@@ -65,8 +70,10 @@ public class MainFrame extends JFrame {
         video = new EmbeddedMediaPlayerComponent();
         video.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         video.setBounds((int) (width * 0.9 * 0.2), 0, (int) (width * 0.9 * 0.8), (int) (height * 0.9 * 0.85));
+        video.getMediaPlayer().setFullScreenStrategy(new DefaultAdaptiveRuntimeFullScreenStrategy(frame));
         frame.add(video);
         view = new ViewPanel();
+        view.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         view.setBounds((int) (width * 0.9 * 0.2), 0, (int) (width * 0.9 * 0.8), (int) (height * 0.9 * 0.85));
         frame.add(view);
         RateInit();
@@ -279,6 +286,17 @@ public class MainFrame extends JFrame {
                             case KeyEvent.VK_TAB:
                                 frame.requestFocus();
                                 break;
+                            case KeyEvent.VK_ESCAPE:
+                                Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+                                double width = screen.getWidth();
+                                double height = screen.getHeight();
+                                bottom.setVisible(true);
+                                list.setVisible(true);
+                                video.setBounds((int) (width * 0.9 * 0.2), 0, (int) (width * 0.9 * 0.8), (int) (height * 0.9 * 0.85));
+                                view.setBounds((int) (width * 0.9 * 0.2), 0, (int) (width * 0.9 * 0.8), (int) (height * 0.9 * 0.85));
+                                view.getCover().setBounds(0, 0, (int) (width * 0.9 * 0.8), (int) (height * 0.9 * 0.85));
+                                video.getMediaPlayer().setFullScreen(false);
+                                break;
                         }
                     }
                 }
@@ -340,19 +358,17 @@ public class MainFrame extends JFrame {
             }
         });
         frame.addWindowListener(new WindowAdapter() {
-
             @Override
             public void windowDeiconified(WindowEvent e) {
                 frame.requestFocus();
             }
-
             @Override
             public void windowActivated(WindowEvent e) {
                 frame.requestFocus();
             }
         });
-
         video.getVideoSurface().addMouseListener(new VideoClickListener());
+        view.addMouseListener(new VideoClickListener());
     }
 
     public static EmbeddedMediaPlayerComponent getVideo() {
