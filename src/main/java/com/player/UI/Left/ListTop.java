@@ -90,7 +90,6 @@ public class ListTop extends JPanel {
                     return;
                 }
                 File media = new File("res/media");
-                media.setWritable(true);
                 FileInputStream input = new FileInputStream(media);
                 Scanner sc = new Scanner(input);
                 String had = "";
@@ -98,7 +97,6 @@ public class ListTop extends JPanel {
                     String line = sc.nextLine();
                     if (path.equals(line)) {
                         JOptionPane.showMessageDialog(null,"播放列表中已存在该曲目！", "请勿重复添加", 0);
-                        media.setReadOnly();
                         return;
                     } else {
                         had += "\n" + line;
@@ -109,7 +107,6 @@ public class ListTop extends JPanel {
                 bw.write(path + had);
                 bw.flush();
                 bw.close();
-                media.setReadOnly();
                 if (had.equals("")) {
                     MediaPlayer.getInstance().init();
                 }

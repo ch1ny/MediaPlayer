@@ -6,9 +6,7 @@ import com.player.Util.VideoFormat;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
 import java.util.Vector;
 
@@ -34,7 +32,6 @@ public class ItemList extends JPanel {
         if (!media.exists()) {
             try {
                 media.createNewFile();
-                media.setReadOnly();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -43,12 +40,18 @@ public class ItemList extends JPanel {
             FileInputStream stream = new FileInputStream(media);
             Scanner sc = new Scanner(stream);
             Vector list = new Vector();
+            String str = "";
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
                 if (AudioFormat.endWith(line) || VideoFormat.endWith(line)) {
+                    str += line + "\n";
                     list.add(line);
                 }
             }
+            BufferedWriter bw = new BufferedWriter(new FileWriter(media));
+            bw.write(str);
+            bw.flush();
+            bw.close();
             return list;
         } catch (Exception e) {
             e.printStackTrace();

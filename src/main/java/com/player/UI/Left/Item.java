@@ -55,7 +55,6 @@ public class Item extends JPanel {
                     int confirm = JOptionPane.showConfirmDialog(null, "是否要将文件：" + title.getText() + "移出播放列表？", "移除文件", JOptionPane.YES_NO_OPTION);
                     if (confirm == 0) {
                         File file = new File("res/media");
-                        file.setWritable(true);
                         try {
                             if (MediaPlayer.getInstance().getFilePath().equals(path)) {
                                 try {
@@ -80,7 +79,6 @@ public class Item extends JPanel {
                             bw.write(rest);
                             bw.flush();
                             bw.close();
-                            file.setReadOnly();
                             if (rest.equals("")) {
                                 MediaPlayer.getInstance().init();
                             }

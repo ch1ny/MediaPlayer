@@ -139,37 +139,36 @@ public class MainFrame extends JFrame {
                                 break;
                         }
                     } else if (e.isShiftDown()) {
-                        if (MediaPlayer.getInstance().getMoV() == 1) {
-                            switch (e.getKeyCode()) {
-                                case KeyEvent.VK_RIGHT:
-                                    try {
-                                        float rate = video.getMediaPlayer().getRate();
-                                        int index = Rates.indexOf(rate);
-                                        if (index != Rates.size() - 1) {
-                                            video.getMediaPlayer().setRate(Rates.get(index + 1));
-                                            Process.getInstance().setSleep(Rates.get(index + 1));
-                                        }
-                                        r.setRate(video.getMediaPlayer().getRate());
-                                    } catch (Exception e1) {
-                                        e1.printStackTrace();
+                        switch (e.getKeyCode()) {
+                            case KeyEvent.VK_RIGHT:
+                                try {
+                                    float rate = video.getMediaPlayer().getRate();
+                                    int index = Rates.indexOf(rate);
+                                    if (index != Rates.size() - 1) {
+                                        video.getMediaPlayer().setRate(Rates.get(index + 1));
+                                        Process.getInstance().setSleep(Rates.get(index + 1));
                                     }
-                                    break;
-                                case KeyEvent.VK_LEFT:
-                                    try {
-                                        float rate = video.getMediaPlayer().getRate();
-                                        int index = Rates.indexOf(rate);
-                                        if (index != 0) {
-                                            video.getMediaPlayer().setRate(Rates.get(index - 1));
-                                            Process.getInstance().setSleep(Rates.get(index - 1));
-                                        }
-                                        r.setRate(video.getMediaPlayer().getRate());
-                                    } catch (Exception e1) {
-                                        e1.printStackTrace();
+                                    r.setRate(video.getMediaPlayer().getRate());
+                                } catch (Exception e1) {
+                                    e1.printStackTrace();
+                                }
+                                break;
+                            case KeyEvent.VK_LEFT:
+                                try {
+                                    float rate = video.getMediaPlayer().getRate();
+                                    int index = Rates.indexOf(rate);
+                                    if (index != 0) {
+                                        video.getMediaPlayer().setRate(Rates.get(index - 1));
+                                        Process.getInstance().setSleep(Rates.get(index - 1));
                                     }
-                                    break;
-                            }
+                                    r.setRate(video.getMediaPlayer().getRate());
+                                } catch (Exception e1) {
+                                    e1.printStackTrace();
+                                }
+                                break;
                         }
                     } else {
+                        int volume;
                         switch (e.getKeyCode()) {
                             case KeyEvent.VK_SPACE:
                                 MediaPlayer player = MediaPlayer.getInstance();
@@ -186,102 +185,38 @@ public class MainFrame extends JFrame {
                                 }
                                 break;
                             case KeyEvent.VK_RIGHT:
-                                switch (MediaPlayer.getInstance().getMoV()) {
-                                    case JudgeMoV.MUSIC:
-                                        if (MediaPlayer.getInstance().getMusic() != null) {
-                                            Bottom.getFunction().playBegin();
-                                            double percent = (double) Bottom.getFunction().getSlider().getValue() / 100; // 相较于当前的进度
-                                            double distance = 10.0; // 设置跳跃间隔
-                                            double rate = distance / MediaPlayer.getInstance().getLength();
-                                            percent += rate;
-                                            if (percent > 1) {
-                                                percent = 1;
-                                            }
-                                            MediaPlayer.getInstance().jump(percent);
-                                        }
-                                        break;
-                                    case JudgeMoV.VIDEO:
-                                        if (MediaPlayer.getInstance().getVideo() != null) {
-                                            Bottom.getFunction().playBegin();
-                                            long now = MainFrame.getVideo().getMediaPlayer().getTime();
-                                            now += 3000;
-                                            MediaPlayer.getInstance().jump(now);
-                                        }
-                                        break;
+                                if (MediaPlayer.getInstance().getMedia() != null) {
+                                    Bottom.getFunction().playBegin();
+                                    long now = MainFrame.getVideo().getMediaPlayer().getTime();
+                                    now += 3000;
+                                    MediaPlayer.getInstance().jump(now);
                                 }
                                 break;
                             case KeyEvent.VK_LEFT:
-                                switch (MediaPlayer.getInstance().getMoV()) {
-                                    case JudgeMoV.MUSIC:
-                                        if (MediaPlayer.getInstance().getMusic() != null) {
-                                            Bottom.getFunction().playBegin();
-                                            double percent = (double) Bottom.getFunction().getSlider().getValue() / 100; // 相较于当前的进度
-                                            double distance = 10.0; // 设置跳跃间隔
-                                            double rate = distance / MediaPlayer.getInstance().getLength();
-                                            percent -= rate;
-                                            if (percent < 0) {
-                                                percent = 0;
-                                            }
-                                            MediaPlayer.getInstance().jump(percent);
-                                        }
-                                        break;
-                                    case JudgeMoV.VIDEO:
-                                        if (MediaPlayer.getInstance().getVideo() != null) {
-                                            Bottom.getFunction().playBegin();
-                                            long now = MainFrame.getVideo().getMediaPlayer().getTime();
-                                            now -= 3000;
-                                            MediaPlayer.getInstance().jump(now);
-                                        }
-                                        break;
+                                if (MediaPlayer.getInstance().getMedia() != null) {
+                                    Bottom.getFunction().playBegin();
+                                    long now = MainFrame.getVideo().getMediaPlayer().getTime();
+                                    now -= 3000;
+                                    MediaPlayer.getInstance().jump(now);
                                 }
                                 break;
                             case KeyEvent.VK_UP:
-                                if (MediaPlayer.getInstance().getMoV() == JudgeMoV.VIDEO) {
-                                    int volume = video.getMediaPlayer().getVolume();
-                                    volume += 50;
-                                    if (volume > 500) {
-                                        volume = 500;
-                                    }
-                                    video.getMediaPlayer().setVolume(volume);
-                                    vol.setVolume(volume / 5);
-                                } else {
-                                    FloatControl gainControl = (FloatControl) MediaPlayer.getInstance().getClip().getControl(FloatControl.Type.MASTER_GAIN);
-                                    float max = gainControl.getMaximum();
-                                    float min = gainControl.getMinimum();
-                                    float distance = max - min;
-                                    float now = gainControl.getValue();
-                                    now += distance / 10;
-                                    if (now > max) {
-                                        now = max;
-                                    }
-                                    gainControl.setValue(now);
-                                    int percent = (int) (((now - min) / distance) * 100);
-                                    vol.setVolume(percent);
+                                volume = video.getMediaPlayer().getVolume();
+                                volume += 50;
+                                if (volume > 500) {
+                                    volume = 500;
                                 }
+                                video.getMediaPlayer().setVolume(volume);
+                                vol.setVolume(volume / 5);
                                 break;
                             case KeyEvent.VK_DOWN:
-                                if (MediaPlayer.getInstance().getMoV() == JudgeMoV.VIDEO) {
-                                    int volume = video.getMediaPlayer().getVolume();
-                                    volume -= 50;
-                                    if (volume < 0) {
-                                        volume = 0;
-                                    }
-                                    video.getMediaPlayer().setVolume(volume);
-                                    vol.setVolume(volume / 5);
-                                } else {
-                                    FloatControl gainControl = (FloatControl) MediaPlayer.getInstance().getClip().getControl(FloatControl.Type.MASTER_GAIN);
-                                    float max = gainControl.getMaximum();
-                                    float min = gainControl.getMinimum();
-                                    float distance = max - min;
-                                    float now = gainControl.getValue();
-                                    now -= distance / 10;
-                                    if (now < min) {
-                                        now = min;
-                                    }
-                                    gainControl.setValue(now);
-                                    int percent = (int) (((now - min) / distance) * 100);
-                                    vol.setVolume(percent);
+                                volume = video.getMediaPlayer().getVolume();
+                                volume -= 50;
+                                if (volume < 0) {
+                                    volume = 0;
                                 }
+                                video.getMediaPlayer().setVolume(volume);
+                                vol.setVolume(volume / 5);
                                 break;
                             case KeyEvent.VK_TAB:
                                 frame.requestFocus();
@@ -305,54 +240,25 @@ public class MainFrame extends JFrame {
         frame.addMouseWheelListener(new MouseAdapter() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
+                int volume;
                 switch (e.getWheelRotation()) {
                     case -1:
-                        if (MediaPlayer.getInstance().getMoV() == JudgeMoV.VIDEO) {
-                            int volume = video.getMediaPlayer().getVolume();
-                            volume += e.getScrollAmount() * 5;
-                            if (volume > 500) {
-                                volume = 500;
-                            }
-                            video.getMediaPlayer().setVolume(volume);
-                            vol.setVolume(volume / 5);
-                        } else {
-                            FloatControl gainControl = (FloatControl) MediaPlayer.getInstance().getClip().getControl(FloatControl.Type.MASTER_GAIN);
-                            float max = gainControl.getMaximum();
-                            float min = gainControl.getMinimum();
-                            float distance = max - min;
-                            float now = gainControl.getValue();
-                            now += (distance / 100) * e.getScrollAmount();
-                            if (now > max) {
-                                now = max;
-                            }
-                            gainControl.setValue(now);
-                            int percent = (int) (((now - min) / distance) * 100);
-                            vol.setVolume(percent);
+                        volume = video.getMediaPlayer().getVolume();
+                        volume += e.getScrollAmount() * 5;
+                        if (volume > 500) {
+                            volume = 500;
                         }
+                        video.getMediaPlayer().setVolume(volume);
+                        vol.setVolume(volume / 5);
                         break;
                     case 1:
-                        if (MediaPlayer.getInstance().getMoV() == JudgeMoV.VIDEO) {
-                            int volume = video.getMediaPlayer().getVolume();
-                            volume -= e.getScrollAmount() * 5;
-                            if (volume < 0) {
-                                volume = 0;
-                            }
-                            video.getMediaPlayer().setVolume(volume);
-                            vol.setVolume(volume / 5);
-                        } else {
-                            FloatControl gainControl = (FloatControl) MediaPlayer.getInstance().getClip().getControl(FloatControl.Type.MASTER_GAIN);
-                            float max = gainControl.getMaximum();
-                            float min = gainControl.getMinimum();
-                            float distance = max - min;
-                            float now = gainControl.getValue();
-                            now -= (distance / 100) * e.getScrollAmount();
-                            if (now < min) {
-                                now = min;
-                            }
-                            gainControl.setValue(now);
-                            int percent = (int) (((now - min) / distance) * 100);
-                            vol.setVolume(percent);
+                        volume = video.getMediaPlayer().getVolume();
+                        volume -= e.getScrollAmount() * 5;
+                        if (volume < 0) {
+                            volume = 0;
                         }
+                        video.getMediaPlayer().setVolume(volume);
+                        vol.setVolume(volume / 5);
                         break;
                 }
             }

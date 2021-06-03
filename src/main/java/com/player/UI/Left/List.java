@@ -4,7 +4,6 @@ import com.player.MainFrame;
 import com.player.UI.Style.ScrollBarStyle;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class List extends JPanel {
     private ItemList itemList;

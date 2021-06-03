@@ -5,7 +5,7 @@ import com.player.MainFrame;
 import javax.swing.*;
 import java.awt.*;
 
-public class Bottom extends JPanel{
+public class Bottom extends JPanel {
     private static FileName fileName;
     private static Function function;
 

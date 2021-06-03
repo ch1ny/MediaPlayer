@@ -2,9 +2,15 @@
 
 更新说明：
 
+## V1.3.1
+
+* 移除屎山代码，音频视频播放均通过VLCJ实现，逻辑更简洁。
+* 音频增加倍速调节功能。
+* 支持大部分主流媒体格式。当前支持文件格式：[支持格式](#Format Supported)。
+
 ## V1.2.1
 
-* 增加全屏播放功能（视频、音频均适用）
+* 增加全屏播放功能（视频、音频均适用）。
 * 在全屏状态下，部分UI交互界面无法使用，建议通过快捷键控制，[Usage-快捷键](#Usage) 。
 
 ## V1.1.3
@@ -31,6 +37,10 @@
 山东大学2019级面向对象实验，所选课题：**媒体播放器**
 
 课题要求：模拟实现一个多功能媒体播放器，它能播放音频（如mp3歌曲）、视频（选作，不属于基本要求）。媒体播放器界面，有进度条，可展示总播放时间、当前播放时间，进度条可拖动，有播放、暂停键，有快进、快退键。
+
+# Setup
+
+* **安装程序地址** ：https://github.com/AioliaRegulus/MediaPlayer/releases/download/V1.3.1/MediaPlayerSetup.exe
 
 # Usage
 
@@ -78,23 +88,10 @@
 
 **ESC** ：退出全屏
 
-# Q&A
+# Format Supported
 
-**Q**：为什么播放列表中的某些歌曲不见了？
-
-**A**：播放器在读取播放列表时会判断文件是否存在，如果文件不存在会自行将文件从播放列表中移除。
-
-
-
-**Q**：为什么新版本加载音乐比老版本慢？
-
-**A**：新版本为了增加可供播放的音频类型，修改了部分底层实现逻辑。
-
-老版本是通过设置缓冲区，使音频文件以流的形式边读边写，增加I/O读写次数，但是用户不会感受到明显延迟。
-
-新版本目前的实现方式是使用Clip类将音频资源一次性载入到进程中去，因此在音频初始化的过程用户可能会感受到有部分延迟的存在，有待后续更新。
-
-
+* **视频文件** ：*.3g2 *.3gp *.3gp2 *.3gpp *.amv *.asf *.avi *.bik *.bin *.divx *.drc *.dv *.f4v *.flv *.gvi *.gxf *.iso *.m1v *.m2v *.m2t *.m2ts *.m4v *.mkv *.mov *.mp2 *.mp4 *.mp4v *.mpe *.mpeg *.mpeg1 *.mpeg2 *.mpeg4 *.mpg *.mpv2 *.mts *.mxf *.mxg *.nsv *.nuv *.ogg *.ogm *.ogv *.ps *.rec *.rm *.rmvb *.rpl *.thp *.tod *.ts *.tts *.txd *.vob *.vro *.webm *.wm *.wmv *.wtv *.xesc
+* **音频文件** ：*.3ga *.669 *.a52 *.acc *.ac3 *.adt *.adts *.aif *.aiff *.amr *.aob *.ape *.awb *.caf *.dts *.flac *.it *.kar *.m4a *.m4b *.m4p *.m5p *.mid *.mka *.mlp *.mod *.mpa *.mp1 *.mp2 *.mp3 *.mpc *.mpga *.mus *.oga *.ogg *.oma *.opus *.qcp *.ra *.rmi *.s3m *.sid *.spx *.thd *.tta *.voc *.vqf *.w64 *.wav *.wma *.wv *.xa *.xm
 
 # Other
 

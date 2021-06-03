@@ -3,6 +3,8 @@ package com.player.Player;
 import com.player.MainFrame;
 import com.player.UI.Bottom.Function;
 
+import java.util.Date;
+
 public class Process {
 
     private int totalLength;
@@ -47,6 +49,9 @@ public class Process {
 
     public void changeMedia(int length) {
         totalLength = length;
+        if (processThread != null) {
+            processThread = null;
+        }
         processThread = new ProcessThread(0, totalLength);
         processThread.start();
         pause();
@@ -68,13 +73,15 @@ public class Process {
             Function function = MainFrame.getBottom().getFunction();
             try {
                 while (current <= totalLength) {
+                    long start = new Date().getTime();
                     function.setCurrent(current);
                     if (totalLength == 0) {
                         break;
                     }
                     function.setPlayProcessSlider(current * 100 / totalLength);
                     current += 1;
-                    Thread.sleep(sleep);
+                    long end = new Date().getTime();
+                    Thread.sleep(sleep - end + start); // 消除步骤耗时影响
                 }
                 function.setCurrent(0);
                 function.setPlayProcessSlider(0);
@@ -83,7 +90,6 @@ public class Process {
 
             }
         }
-
     }
 
     public void setSleep(float rate) {

@@ -85,28 +85,11 @@ public class Function extends JPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (forward.isEnabled()) {
-                    switch (MediaPlayer.getInstance().getMoV()) {
-                        case JudgeMoV.MUSIC:
-                            if (MediaPlayer.getInstance().getMusic() != null) {
-                                play.setIcon(new ImageIcon(new ImageIcon("res/icon/pause.png").getImage().getScaledInstance((int) (MainFrame.getFrame().getHeight() * 0.1 - 40),(int) (MainFrame.getFrame().getHeight() * 0.1 - 40), Image.SCALE_SMOOTH)));
-                                double percent = (double) playProcessSlider.getValue() / 100; // 相较于当前的进度
-                                double distance = 10.0; // 设置跳跃间隔
-                                double rate = distance / MediaPlayer.getInstance().getLength();
-                                percent += rate;
-                                if (percent > 1) {
-                                    percent = 1;
-                                }
-                                MediaPlayer.getInstance().jump(percent);
-                            }
-                            break;
-                        case JudgeMoV.VIDEO:
-                            if (MediaPlayer.getInstance().getVideo() != null) {
-                                play.setIcon(new ImageIcon(new ImageIcon("res/icon/pause.png").getImage().getScaledInstance((int) (MainFrame.getFrame().getHeight() * 0.1 - 40),(int) (MainFrame.getFrame().getHeight() * 0.1 - 40), Image.SCALE_SMOOTH)));
-                                long now = MainFrame.getVideo().getMediaPlayer().getTime();
-                                now += 3000;
-                                MediaPlayer.getInstance().jump(now);
-                            }
-                            break;
+                    if (MediaPlayer.getInstance().getMedia() != null) {
+                        play.setIcon(new ImageIcon(new ImageIcon("res/icon/pause.png").getImage().getScaledInstance((int) (MainFrame.getFrame().getHeight() * 0.1 - 40),(int) (MainFrame.getFrame().getHeight() * 0.1 - 40), Image.SCALE_SMOOTH)));
+                        long now = MainFrame.getVideo().getMediaPlayer().getTime();
+                        now += 3000;
+                        MediaPlayer.getInstance().jump(now);
                     }
                     MainFrame.getFrame().requestFocus();
                 }
@@ -119,28 +102,11 @@ public class Function extends JPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (backward.isEnabled()) {
-                    switch (MediaPlayer.getInstance().getMoV()) {
-                        case JudgeMoV.MUSIC:
-                            if (MediaPlayer.getInstance().getMusic() != null) {
-                                play.setIcon(new ImageIcon(new ImageIcon("res/icon/pause.png").getImage().getScaledInstance((int) (MainFrame.getFrame().getHeight() * 0.1 - 40),(int) (MainFrame.getFrame().getHeight() * 0.1 - 40), Image.SCALE_SMOOTH)));
-                                double percent = (double) playProcessSlider.getValue() / 100; // 相较于当前的进度
-                                double distance = 10.0; // 设置跳跃间隔
-                                double rate = distance / MediaPlayer.getInstance().getLength();
-                                percent -= rate;
-                                if (percent < 0) {
-                                    percent = 0;
-                                }
-                                MediaPlayer.getInstance().jump(percent);
-                            }
-                            break;
-                        case JudgeMoV.VIDEO:
-                            if (MediaPlayer.getInstance().getVideo() != null) {
-                                play.setIcon(new ImageIcon(new ImageIcon("res/icon/pause.png").getImage().getScaledInstance((int) (MainFrame.getFrame().getHeight() * 0.1 - 40),(int) (MainFrame.getFrame().getHeight() * 0.1 - 40), Image.SCALE_SMOOTH)));
-                                long now = MainFrame.getVideo().getMediaPlayer().getTime();
-                                now -= 3000;
-                                MediaPlayer.getInstance().jump(now);
-                            }
-                            break;
+                    if (MediaPlayer.getInstance().getMedia() != null) {
+                        play.setIcon(new ImageIcon(new ImageIcon("res/icon/pause.png").getImage().getScaledInstance((int) (MainFrame.getFrame().getHeight() * 0.1 - 40),(int) (MainFrame.getFrame().getHeight() * 0.1 - 40), Image.SCALE_SMOOTH)));
+                        long now = MainFrame.getVideo().getMediaPlayer().getTime();
+                        now -= 3000;
+                        MediaPlayer.getInstance().jump(now);
                     }
                     MainFrame.getFrame().requestFocus();
                 }
@@ -157,7 +123,7 @@ public class Function extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (playProcessSlider.isEnabled()) {
-                    if (MediaPlayer.getInstance().getMusic() != null || MediaPlayer.getInstance().getVideo() != null) {
+                    if (MediaPlayer.getInstance().getMedia() != null) {
                         play.setIcon(new ImageIcon(new ImageIcon("res/icon/pause.png").getImage().getScaledInstance((int) (MainFrame.getFrame().getHeight() * 0.1 - 40),(int) (MainFrame.getFrame().getHeight() * 0.1 - 40), Image.SCALE_SMOOTH)));
                         double percent = e.getX() / (double) playProcessSlider.getWidth(); // 相较于当前的进度
                         if (percent > 1) {
@@ -165,16 +131,9 @@ public class Function extends JPanel {
                         } else if (percent < 0) {
                             percent = 0;
                         }
-                        switch (MediaPlayer.getInstance().getMoV()) {
-                            case JudgeMoV.MUSIC:
-                                MediaPlayer.getInstance().jump(percent);
-                                break;
-                            case JudgeMoV.VIDEO:
-                                long total = MainFrame.getVideo().getMediaPlayer().getLength();
-                                long time = (long) (total * percent);
-                                MediaPlayer.getInstance().jump(time);
-                                break;
-                        }
+                        long total = MainFrame.getVideo().getMediaPlayer().getLength();
+                        long time = (long) (total * percent);
+                        MediaPlayer.getInstance().jump(time);
                     }
                     MainFrame.getFrame().requestFocus();
                 }

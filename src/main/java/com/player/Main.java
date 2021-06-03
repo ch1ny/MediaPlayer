@@ -19,7 +19,7 @@ public class Main {
          * 创建并显示GUI。
          * 出于线程安全的考虑，这个方法在事件调用线程中调用。
          */
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+        SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 try {
                     Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/君行一叶舟简体.ttf")).deriveFont(20f);
@@ -28,7 +28,7 @@ public class Main {
                     e.printStackTrace();
                 }
                 try {
-                    MainFrame mainFrame = new MainFrame();
+                    new MainFrame();
                     new MediaPlayer().init();
                 } catch (Exception e) {
                     e.printStackTrace();

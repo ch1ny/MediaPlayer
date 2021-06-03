@@ -13,6 +13,7 @@ import com.player.MainFrame;
 import com.player.UI.Bottom.Bottom;
 import com.player.UI.Bottom.FileName;
 import com.player.UI.View.ViewPanel;
+import com.player.Util.AudioFormat;
 import com.player.Util.JudgeMoV;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
@@ -43,10 +44,8 @@ import java.util.logging.Level;
 public class MediaPlayer {
     private static boolean isPlaying = false; // 正在播放
     private static String filePath; // 当前处理的文件路径
-    private static MusicThread music; // 音频播放线程
-    private static VideoThread video; // 视频播放线程
+    private static MediaThread media; // 媒体播放线程
     private static int totalTime; // 播放媒体的长度
-    private static int MoV; // 判断当前播放的媒体类型
 
     private static final int MUSIC = 0;
     private static final int VIDEO = 1;
@@ -66,9 +65,6 @@ public class MediaPlayer {
             MainFrame.getBottom().getFunction().haveSongs();
         } else {
             totalTime = 0;
-            if (music != null) {
-                music.stop();
-            }
             MainFrame.getView().getCover().setCover(null);
             MainFrame.hideVideo();
             MainFrame.getBottom().getFunction().noSongs();
@@ -80,52 +76,23 @@ public class MediaPlayer {
 
     public static void play(String path) throws IOException, UnsupportedAudioFileException, LineUnavailableException, ReadOnlyFileException, TagException, InvalidAudioFrameException, CannotReadException {
         if (isPlaying) {
-            if (MoV == MUSIC) {
-                music.pause();
-            } else if (MoV == VIDEO) {
-                video.pause();
-            }
+            media.pause();
         }
         filePath = path;
         prepare(path);
         Process.getInstance().changeMedia(totalTime);
-        switch (MoV) {
-            case MUSIC:
-                music.start();
-                break;
-            case VIDEO:
-                video.start();
-                break;
-        }
+        media.start();
         isPlaying = true;
     }
 
     public static void pause() {
-        switch (MoV) {
-            case MUSIC:
-                music.pause();
-                break;
-            case VIDEO:
-                video.pause();
-                break;
-        }
+        media.pause();
         isPlaying = false;
     }
 
     public void go_on() {
-        switch (MoV) {
-            case MUSIC:
-                music.go_on();
-                break;
-            case VIDEO:
-                video.go_on();
-                break;
-        }
+        media.go_on();
         isPlaying = true;
-    }
-
-    public void jump(double percent) {
-        music.jump(percent);
     }
 
     public void jump(long time) {
@@ -134,8 +101,8 @@ public class MediaPlayer {
         } else if (time > totalTime * 1000) {
             time = totalTime * 1000;
         }
-        video.jump(time);
-        video.go_on();
+        media.jump(time);
+        media.go_on();
     }
 
     public static void playEnd() throws UnsupportedAudioFileException, IOException, LineUnavailableException, ReadOnlyFileException, TagException, InvalidAudioFrameException, CannotReadException, InterruptedException {
@@ -204,13 +171,11 @@ public class MediaPlayer {
                     BufferedImage bufferedImage = getCover(filePath);
                     view.getCover().setCover(bufferedImage);
                     MainFrame.hideVideo();
-                    music = new MusicThread(path);
-                    MoV = MUSIC;
+                    media = new MediaThread(path);
                     break;
                 case VIDEO:
                     MainFrame.showVideo();
-                    video = new VideoThread(path);
-                    MoV = VIDEO;
+                    media = new MediaThread(path);
                     break;
             }
         }
@@ -219,27 +184,39 @@ public class MediaPlayer {
     private static BufferedImage getCover(String path) throws ReadOnlyFileException, IOException, TagException, InvalidAudioFrameException, CannotReadException {
         String type = path.substring(path.lastIndexOf("."));
         BufferedImage bufferedImage = null;
-        AudioFileReader reader;
-        switch (type.toLowerCase(Locale.ROOT)) {
-            case ".mp3":
-                reader = new MP3FileReader();
-                break;
-            case ".flac":
-                reader = new FlacFileReader();
-                break;
-            case ".ogg":
-                reader = new OggFileReader();
-                break;
-            case ".wav":
-                reader = new WavFileReader();
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + type.toLowerCase(Locale.ROOT));
-        }
-        Artwork artwork = reader.read(new File(path)).getTag().getFirstArtwork();
-        try {
-            bufferedImage = artwork.getImage();
-        } catch (NullPointerException e) {
+        if (AudioFormat.hasCover(path)) {
+            AudioFileReader reader = null;
+            switch (type.toLowerCase(Locale.ROOT)) {
+                case ".mp3":
+                    reader = new MP3FileReader();
+                    break;
+                case ".flac":
+                    reader = new FlacFileReader();
+                    break;
+                case ".ogg":
+                    reader = new OggFileReader();
+                    break;
+                case ".wav":
+                    reader = new WavFileReader();
+                    break;
+            }
+            Artwork artwork = reader.read(new File(path)).getTag().getFirstArtwork();
+            try {
+                bufferedImage = artwork.getImage();
+            } catch (NullPointerException e) {
+                FileImageInputStream unknown = new FileImageInputStream(new File("res/icon/unknown.png"));
+                ByteArrayOutputStream output = new ByteArrayOutputStream();
+                byte[] buf = new byte[1024];
+                int numBytesRead = 0;
+                while ((numBytesRead = unknown.read(buf)) != -1) {
+                    output.write(buf, 0, numBytesRead);
+                }
+                ByteArrayInputStream bais = new ByteArrayInputStream(output.toByteArray());
+                bufferedImage = ImageIO.read(bais);
+                output.close();
+                unknown.close();
+            }
+        } else {
             FileImageInputStream unknown = new FileImageInputStream(new File("res/icon/unknown.png"));
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             byte[] buf = new byte[1024];
@@ -301,68 +278,11 @@ public class MediaPlayer {
         VorbisCommentReader.logger.setLevel(Level.OFF);
     }
 
-    private static class MusicThread extends Thread {
-        private static String filepath; // 当前播放的文件路径
-        private static Clip clip;
-        private static AudioInputStream stream;
-        private static int mark; // 记录暂停位置
-
-        public MusicThread(String file) throws IOException, UnsupportedAudioFileException, LineUnavailableException {
-            filepath = file;
-            stream = AudioSystem.getAudioInputStream(new File(filepath));
-            AudioFormat format = stream.getFormat();
-            if (format.getEncoding() != AudioFormat.Encoding.PCM_SIGNED) {
-                format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, format.getSampleRate(), 16, format.getChannels(), format.getChannels() * 2, format.getSampleRate(), false);
-                stream = AudioSystem.getAudioInputStream(format, stream);
-            }
-            clip = AudioSystem.getClip();
-            clip.open(stream);
-            totalTime = (int) (clip.getFrameLength() / format.getFrameRate());
-        }
-
-        @Override
-        public void run() {
-            play(0);
-        }
-
-        private void play(int frame) {
-            try {
-                clip.setFramePosition(frame);
-                clip.start();
-                Process.getInstance().go_on();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        private void pause() {
-            mark = clip.getFramePosition();
-            Process.getInstance().pause();
-            clip.stop();
-        }
-
-        private void go_on() {
-            play(mark);
-            Process.getInstance().go_on();
-        }
-
-        private void jump(double percent) {
-            clip.stop();
-            play((int) (percent * clip.getFrameLength()));
-            double time = percent * totalTime;
-            Process.getInstance().setProcess((int) time);
-        }
-
-        public Clip getClip() {
-            return clip;
-        }
-    }
-
-    private static class VideoThread extends Thread {
+    private static class MediaThread extends Thread {
         private static String filepath; // 当前播放的文件路径
         private static EmbeddedMediaPlayerComponent player;
 
-        public VideoThread(String file) {
+        public MediaThread(String file) {
             filepath = file;
             player = MainFrame.getVideo();
             player.getMediaPlayer().playMedia(filepath);
@@ -406,19 +326,7 @@ public class MediaPlayer {
         return totalTime;
     }
 
-    public MusicThread getMusic() {
-        return music;
-    }
-
-    public Clip getClip() {
-        return music.getClip();
-    }
-
-    public VideoThread getVideo() {
-        return video;
-    }
-
-    public int getMoV() {
-        return MoV;
+    public MediaThread getMedia() {
+        return media;
     }
 }
