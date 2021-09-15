@@ -31,10 +31,10 @@ public class Rate extends JPanel {
 
     public void setRate(float rate) {
         this.rate.setText(rate + "x");
-        int x = (int) (MainFrame.getVideo().getWidth() * 0.45 + MainFrame.getVideo().getX());
-        int y = (int) (MainFrame.getVideo().getHeight() * 0.45);
-        int width = (int) (MainFrame.getVideo().getWidth() * 0.1);
-        int height = (int) (MainFrame.getVideo().getHeight() * 0.1);
+        int x = (int) (MainFrame.getMedia().getWidth() * 0.45 + MainFrame.getMedia().getX());
+        int y = (int) (MainFrame.getMedia().getHeight() * 0.45);
+        int width = (int) (MainFrame.getMedia().getWidth() * 0.1);
+        int height = (int) (MainFrame.getMedia().getHeight() * 0.1);
         setBounds(x, y, width, height);
         this.rate.setBounds(0, 0, width, height);
         setVisible(true);

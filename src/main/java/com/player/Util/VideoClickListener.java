@@ -80,16 +80,17 @@ public class VideoClickListener extends MouseAdapter {
 
     private void mouseClickedTwice() {
         // 双击事件
-        EmbeddedMediaPlayerComponent media = MainFrame.getVideo();
+        EmbeddedMediaPlayerComponent media = MainFrame.getMedia();
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         double width = screen.getWidth();
         double height = screen.getHeight();
         if (media.getMediaPlayer().isFullScreen()) {
             MainFrame.getBottom().setVisible(true);
             MainFrame.getList().setVisible(true);
-            media.setBounds((int) (width * 0.9 * 0.2), 0, (int) (width * 0.9 * 0.8), (int) (height * 0.9 * 0.85));
-            MainFrame.getView().setBounds((int) (width * 0.9 * 0.2), 0, (int) (width * 0.9 * 0.8), (int) (height * 0.9 * 0.85));
-            MainFrame.getView().getCover().setBounds(0, 0, (int) (width * 0.9 * 0.8), (int) (height * 0.9 * 0.85));
+            media.setBounds((int) (width * 0.9 * 0.2), 0, (int) (width * 0.9 * 0.8), (int) (height * 0.9 * 0.8));
+            MainFrame.getView().setBounds((int) (width * 0.9 * 0.2), 0, (int) (width * 0.9 * 0.8), (int) (height * 0.9 * 0.8));
+            MainFrame.getView().getCover().setBounds(0, 0, (int) (width * 0.9 * 0.8), (int) (height * 0.9 * 0.8));
+            MainFrame.getMenu().setVisible(true);
             media.getMediaPlayer().setFullScreen(false);
         } else {
             MainFrame.getBottom().setVisible(false);
@@ -97,6 +98,7 @@ public class VideoClickListener extends MouseAdapter {
             media.setBounds(0,0, (int) width, (int) height);
             MainFrame.getView().setBounds(0,0, (int) width, (int) height);
             MainFrame.getView().getCover().setBounds(0,0, (int) width, (int) height);
+            MainFrame.getMenu().setVisible(false);
             media.getMediaPlayer().setFullScreen(true);
         }
         MainFrame.getFrame().requestFocus();

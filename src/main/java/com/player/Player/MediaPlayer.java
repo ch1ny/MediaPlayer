@@ -12,6 +12,7 @@ package com.player.Player;
 import com.player.MainFrame;
 import com.player.UI.Bottom.Bottom;
 import com.player.UI.Bottom.FileName;
+import com.player.UI.View.CoverView;
 import com.player.UI.View.ViewPanel;
 import com.player.Util.AudioFormat;
 import com.player.Util.JudgeMoV;
@@ -284,7 +285,7 @@ public class MediaPlayer {
 
         public MediaThread(String file) {
             filepath = file;
-            player = MainFrame.getVideo();
+            player = MainFrame.getMedia();
             player.getMediaPlayer().playMedia(filepath);
             while (!player.getMediaPlayer().isPlaying());
             player.getMediaPlayer().pause();
@@ -331,6 +332,8 @@ public class MediaPlayer {
     }
 }
 /*
+    ☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭
+    伟大的无产阶级革命家毛泽东同志永垂不朽！ 马克思主义光辉保佑代码永无Bug！ ☭共产主义赤旗终将解放全世界！
                                          ____
                                 __mmmm@@@@@@@@@@mmms__.
                          _____g@@@@@@@@@@@@@@@@@@@@@@@@@m_
@@ -372,6 +375,6 @@ public class MediaPlayer {
             -!V`- i!'    `/.Vc.-`     '`
                   '       !  g` \.     '
                              [
-    ☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭
     伟大的无产阶级革命家毛泽东同志永垂不朽！ 马克思主义光辉保佑代码永无Bug！ ☭共产主义赤旗终将解放全世界！
+    ☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭
  */

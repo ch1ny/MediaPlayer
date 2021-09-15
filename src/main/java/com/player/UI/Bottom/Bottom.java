@@ -13,11 +13,11 @@ public class Bottom extends JPanel {
         setBackground(new Color(125,125,125));
         setLayout(null);
         fileName = new FileName();
-        fileName.setBounds(0,0,(int) (MainFrame.getFrame().getWidth() * 0.2),(int) (MainFrame.getFrame().getHeight() * 0.15));
+        fileName.setBounds(0,0,(int) (MainFrame.getFrame().getWidth() * 0.2),(int) (MainFrame.getFrame().getHeight() * 0.2));
         fileName.setVisible(true);
         add(fileName);
         function = new Function();
-        function.setBounds((int) (MainFrame.getFrame().getWidth() * 0.2),0,(int) (MainFrame.getFrame().getWidth() * 0.8),(int) (MainFrame.getFrame().getHeight() * 0.15));
+        function.setBounds((int) (MainFrame.getFrame().getWidth() * 0.2),0,(int) (MainFrame.getFrame().getWidth() * 0.8),(int) (MainFrame.getFrame().getHeight() * 0.2));
         function.setVisible(true);
         add(function);
     }

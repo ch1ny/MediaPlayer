@@ -3,7 +3,6 @@ package com.player.UI.Bottom;
 import com.player.MainFrame;
 import com.player.Player.MediaPlayer;
 import com.player.UI.Style.SliderStyle;
-import com.player.Util.JudgeMoV;
 import com.player.Util.TimeFormat;
 import com.player.Player.Process;
 
@@ -17,12 +16,13 @@ public class Function extends JPanel {
     private JLabel total;
     private JSlider playProcessSlider;
     public boolean isEnable = true;
+    private boolean isAss = false;
 
     public Function() {
         setBackground(new Color(125,125,125));
         setLayout(null);
         play = new functionButton(new ImageIcon(new ImageIcon("res/icon/play.png").getImage().getScaledInstance((int) (MainFrame.getFrame().getHeight() * 0.1 - 40),(int) (MainFrame.getFrame().getHeight() * 0.1 - 40), Image.SCALE_SMOOTH)));
-        play.setBounds((int) (((MainFrame.getFrame().getWidth() * 0.8) - (MainFrame.getFrame().getHeight() * 0.1 - 40)) / 2), 30, (int) (MainFrame.getFrame().getHeight() * 0.1 - 40), (int) (MainFrame.getFrame().getHeight() * 0.1 - 40));
+        play.setBounds((int) (((MainFrame.getFrame().getWidth() * 0.8) - (MainFrame.getFrame().getHeight() * 0.1 - 40)) / 2), (int) (MainFrame.getFrame().getHeight() * 0.2 * 0.25), (int) (MainFrame.getFrame().getHeight() * 0.1 - 40), (int) (MainFrame.getFrame().getHeight() * 0.1 - 40));
         add(play);
         play.addMouseListener(new MouseAdapter() {
             @Override
@@ -46,7 +46,7 @@ public class Function extends JPanel {
         });
 
         next = new functionButton(new ImageIcon(new ImageIcon("res/icon/next.png").getImage().getScaledInstance((int) (MainFrame.getFrame().getHeight() * 0.1 - 40),(int) (MainFrame.getFrame().getHeight() * 0.1 - 40), Image.SCALE_SMOOTH)));
-        next.setBounds((int) (((MainFrame.getFrame().getWidth() * 0.8) - (MainFrame.getFrame().getHeight() * 0.1 - 40)) / 2 + 75), 30, (int) (MainFrame.getFrame().getHeight() * 0.1 - 40), (int) (MainFrame.getFrame().getHeight() * 0.1 - 40));
+        next.setBounds((int) (((MainFrame.getFrame().getWidth() * 0.8) - (MainFrame.getFrame().getHeight() * 0.1 - 40)) / 2 + 75), (int) (MainFrame.getFrame().getHeight() * 0.2 * 0.25), (int) (MainFrame.getFrame().getHeight() * 0.1 - 40), (int) (MainFrame.getFrame().getHeight() * 0.1 - 40));
         add(next);
         next.addMouseListener(new MouseAdapter() {
             @Override
@@ -62,7 +62,7 @@ public class Function extends JPanel {
             }
         });
         prev = new functionButton(new ImageIcon(new ImageIcon("res/icon/prev.png").getImage().getScaledInstance((int) (MainFrame.getFrame().getHeight() * 0.1 - 40),(int) (MainFrame.getFrame().getHeight() * 0.1 - 40), Image.SCALE_SMOOTH)));
-        prev.setBounds((int) (((MainFrame.getFrame().getWidth() * 0.8) - (MainFrame.getFrame().getHeight() * 0.1 - 40)) / 2 - 75), 30, (int) (MainFrame.getFrame().getHeight() * 0.1 - 40), (int) (MainFrame.getFrame().getHeight() * 0.1 - 40));
+        prev.setBounds((int) (((MainFrame.getFrame().getWidth() * 0.8) - (MainFrame.getFrame().getHeight() * 0.1 - 40)) / 2 - 75), (int) (MainFrame.getFrame().getHeight() * 0.2 * 0.25), (int) (MainFrame.getFrame().getHeight() * 0.1 - 40), (int) (MainFrame.getFrame().getHeight() * 0.1 - 40));
         add(prev);
         prev.addMouseListener(new MouseAdapter() {
             @Override
@@ -79,7 +79,7 @@ public class Function extends JPanel {
         });
 
         forward = new functionButton(new ImageIcon(new ImageIcon("res/icon/forward.png").getImage().getScaledInstance((int) (MainFrame.getFrame().getHeight() * 0.1 - 40),(int) (MainFrame.getFrame().getHeight() * 0.1 - 40), Image.SCALE_SMOOTH)));
-        forward.setBounds((int) (((MainFrame.getFrame().getWidth() * 0.8) - (MainFrame.getFrame().getHeight() * 0.1 - 40)) / 2 + 150), 30, (int) (MainFrame.getFrame().getHeight() * 0.1 - 40), (int) (MainFrame.getFrame().getHeight() * 0.1 - 40));
+        forward.setBounds((int) (((MainFrame.getFrame().getWidth() * 0.8) - (MainFrame.getFrame().getHeight() * 0.1 - 40)) / 2 + 150), (int) (MainFrame.getFrame().getHeight() * 0.2 * 0.25), (int) (MainFrame.getFrame().getHeight() * 0.1 - 40), (int) (MainFrame.getFrame().getHeight() * 0.1 - 40));
         add(forward);
         forward.addMouseListener(new MouseAdapter() {
             @Override
@@ -87,7 +87,7 @@ public class Function extends JPanel {
                 if (forward.isEnabled()) {
                     if (MediaPlayer.getInstance().getMedia() != null) {
                         play.setIcon(new ImageIcon(new ImageIcon("res/icon/pause.png").getImage().getScaledInstance((int) (MainFrame.getFrame().getHeight() * 0.1 - 40),(int) (MainFrame.getFrame().getHeight() * 0.1 - 40), Image.SCALE_SMOOTH)));
-                        long now = MainFrame.getVideo().getMediaPlayer().getTime();
+                        long now = MainFrame.getMedia().getMediaPlayer().getTime();
                         now += 3000;
                         MediaPlayer.getInstance().jump(now);
                     }
@@ -96,7 +96,7 @@ public class Function extends JPanel {
             }
         });
         backward = new functionButton(new ImageIcon(new ImageIcon("res/icon/backward.png").getImage().getScaledInstance((int) (MainFrame.getFrame().getHeight() * 0.1 - 40),(int) (MainFrame.getFrame().getHeight() * 0.1 - 40), Image.SCALE_SMOOTH)));
-        backward.setBounds((int) (((MainFrame.getFrame().getWidth() * 0.8) - (MainFrame.getFrame().getHeight() * 0.1 - 40)) / 2 - 150), 30, (int) (MainFrame.getFrame().getHeight() * 0.1 - 40), (int) (MainFrame.getFrame().getHeight() * 0.1 - 40));
+        backward.setBounds((int) (((MainFrame.getFrame().getWidth() * 0.8) - (MainFrame.getFrame().getHeight() * 0.1 - 40)) / 2 - 150), (int) (MainFrame.getFrame().getHeight() * 0.2 * 0.25), (int) (MainFrame.getFrame().getHeight() * 0.1 - 40), (int) (MainFrame.getFrame().getHeight() * 0.1 - 40));
         add(backward);
         backward.addMouseListener(new MouseAdapter() {
             @Override
@@ -104,7 +104,7 @@ public class Function extends JPanel {
                 if (backward.isEnabled()) {
                     if (MediaPlayer.getInstance().getMedia() != null) {
                         play.setIcon(new ImageIcon(new ImageIcon("res/icon/pause.png").getImage().getScaledInstance((int) (MainFrame.getFrame().getHeight() * 0.1 - 40),(int) (MainFrame.getFrame().getHeight() * 0.1 - 40), Image.SCALE_SMOOTH)));
-                        long now = MainFrame.getVideo().getMediaPlayer().getTime();
+                        long now = MainFrame.getMedia().getMediaPlayer().getTime();
                         now -= 3000;
                         MediaPlayer.getInstance().jump(now);
                     }
@@ -114,12 +114,17 @@ public class Function extends JPanel {
         });
 
         playProcessSlider = new JSlider(0,100,0);
-        playProcessSlider.setBounds((int) (((MainFrame.getFrame().getWidth() * 0.8) - (MainFrame.getFrame().getWidth() * 0.8 * 0.5)) / 2), 5,(int) (MainFrame.getFrame().getWidth() * 0.8 * 0.5),24);
+        playProcessSlider.setBounds((int) (((MainFrame.getFrame().getWidth() * 0.8) - (MainFrame.getFrame().getWidth() * 0.8 * 0.5)) / 2), (int) (MainFrame.getFrame().getHeight() * 0.2 * 0.1),(int) (MainFrame.getFrame().getWidth() * 0.8 * 0.5),24);
         playProcessSlider.setUI(new SliderStyle(playProcessSlider));
         playProcessSlider.setBackground(new Color(125,125,125));
         playProcessSlider.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add(playProcessSlider);
         playProcessSlider.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                playProcessSlider.setUI(new SliderStyle(playProcessSlider));
+            }
+
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (playProcessSlider.isEnabled()) {
@@ -131,7 +136,7 @@ public class Function extends JPanel {
                         } else if (percent < 0) {
                             percent = 0;
                         }
-                        long total = MainFrame.getVideo().getMediaPlayer().getLength();
+                        long total = MainFrame.getMedia().getMediaPlayer().getLength();
                         long time = (long) (total * percent);
                         MediaPlayer.getInstance().jump(time);
                     }
@@ -156,12 +161,12 @@ public class Function extends JPanel {
         });
 
         current = new JLabel("00:00");
-        current.setBounds((int) (((MainFrame.getFrame().getWidth() * 0.8) - (MainFrame.getFrame().getWidth() * 0.8 * 0.5)) / 2 - 50), 0, 50, 30);
+        current.setBounds((int) (((MainFrame.getFrame().getWidth() * 0.8) - (MainFrame.getFrame().getWidth() * 0.8 * 0.5)) / 2 - 50), (int) (MainFrame.getFrame().getHeight() * 0.2 * 0.1), 50, 30);
         current.setForeground(new Color(255,255,255));
         add(current);
 
         total = new JLabel("00:00");
-        total.setBounds((int) (((MainFrame.getFrame().getWidth() * 0.8) + (MainFrame.getFrame().getWidth() * 0.8 * 0.5)) / 2 + 10), 0, 50, 30);
+        total.setBounds((int) (((MainFrame.getFrame().getWidth() * 0.8) + (MainFrame.getFrame().getWidth() * 0.8 * 0.5)) / 2 + 10), (int) (MainFrame.getFrame().getHeight() * 0.2 * 0.1), 50, 30);
         total.setForeground(new Color(255,255,255));
         add(total);
     }
@@ -217,7 +222,7 @@ public class Function extends JPanel {
         isEnable = true;
     }
 
-    class functionButton extends JButton {
+    private class functionButton extends JButton {
         public functionButton(Icon icon) {
             super("", icon);
             setBackground(null);

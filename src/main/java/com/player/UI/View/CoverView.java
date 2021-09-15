@@ -5,6 +5,7 @@ import com.player.MainFrame;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.BufferedWriter;
 
 public class CoverView extends JPanel {
     private static BufferedImage image;
@@ -33,4 +34,5 @@ public class CoverView extends JPanel {
     public void setVisible(boolean aFlag) {
         super.setVisible(aFlag);
     }
+
 }

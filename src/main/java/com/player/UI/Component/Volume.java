@@ -27,16 +27,16 @@ public class Volume extends JPanel {
 
     public void setVolume(int vol) {
         Volume.super.remove(image);
-        int x = (int) (MainFrame.getVideo().getWidth() * 0.45 + MainFrame.getVideo().getX());
-        int y = (int) (MainFrame.getVideo().getHeight() * 0.4);
-        int width = (int) (MainFrame.getVideo().getWidth() * 0.1);
-        int height = (int) (MainFrame.getVideo().getHeight() * 0.2);
+        int x = (int) (MainFrame.getMedia().getWidth() * 0.45 + MainFrame.getMedia().getX());
+        int y = (int) (MainFrame.getMedia().getHeight() * 0.4);
+        int width = (int) (MainFrame.getMedia().getWidth() * 0.1);
+        int height = (int) (MainFrame.getMedia().getHeight() * 0.2);
         setBounds(x, y, width, height);
         if (vol <= 0) {
             image = new JLabel(new ImageIcon(new ImageIcon("res/icon/mute.png").getImage().getScaledInstance((int) (width * 0.3),(int) (width * 0.3), Image.SCALE_SMOOTH)));
-        } else if (vol < 30) {
-            image = new JLabel(new ImageIcon(new ImageIcon("res/icon/volume0.png").getImage().getScaledInstance((int) (width * 0.3),(int) (width * 0.3), Image.SCALE_SMOOTH)));
         } else if (vol < 70) {
+            image = new JLabel(new ImageIcon(new ImageIcon("res/icon/volume0.png").getImage().getScaledInstance((int) (width * 0.3),(int) (width * 0.3), Image.SCALE_SMOOTH)));
+        } else if (vol < 100) {
             image = new JLabel(new ImageIcon(new ImageIcon("res/icon/volume1.png").getImage().getScaledInstance((int) (width * 0.3),(int) (width * 0.3), Image.SCALE_SMOOTH)));
         } else {
             image = new JLabel(new ImageIcon(new ImageIcon("res/icon/volume2.png").getImage().getScaledInstance((int) (width * 0.3),(int) (width * 0.3), Image.SCALE_SMOOTH)));

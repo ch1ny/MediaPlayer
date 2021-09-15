@@ -11,17 +11,14 @@ public class List extends JPanel {
 
     public List() {
         setLayout(null);
-        setBounds(0,0,(int) (MainFrame.getFrame().getWidth() * 0.2),(int) (MainFrame.getFrame().getHeight() * 0.85));
-        ListTop top = new ListTop();
-        top.setBounds(0,0,(int) (MainFrame.getFrame().getWidth() * 0.2), 50);
+        setBounds(0,0,(int) (MainFrame.getFrame().getWidth() * 0.2),(int) (MainFrame.getFrame().getHeight() * 0.8));
         itemList = new ItemList();
         jScrollPane = new JScrollPane();
         jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane.getVerticalScrollBar().setUnitIncrement(15);
         jScrollPane.getVerticalScrollBar().setUI(new ScrollBarStyle());
-        jScrollPane.setBounds(0, 50, (int) (MainFrame.getFrame().getWidth() * 0.2), (int) (MainFrame.getFrame().getHeight() * 0.85 - 50));
+        jScrollPane.setBounds(0, 0, (int) (MainFrame.getFrame().getWidth() * 0.2), (int) (MainFrame.getFrame().getHeight() * 0.8));
         jScrollPane.setViewportView(itemList);
-        add(top);
         add(jScrollPane);
     }
 }
