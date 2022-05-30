@@ -12,7 +12,6 @@ package com.player.Player;
 import com.player.MainFrame;
 import com.player.UI.Bottom.Bottom;
 import com.player.UI.Bottom.FileName;
-import com.player.UI.View.CoverView;
 import com.player.UI.View.ViewPanel;
 import com.player.Util.AudioFormat;
 import com.player.Util.JudgeMoV;

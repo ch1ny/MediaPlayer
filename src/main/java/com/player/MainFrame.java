@@ -24,7 +24,7 @@ import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
 import uk.co.caprica.vlcj.player.embedded.DefaultAdaptiveRuntimeFullScreenStrategy;
 import uk.co.caprica.vlcj.runtime.RuntimeUtil;
 
-public class MainFrame extends JFrame {
+public class MainFrame {
 
     private static JFrame frame;
     private static MenuBar menuBar;
@@ -259,12 +259,20 @@ public class MainFrame extends JFrame {
                                 menuBar.setVisible(true);
                                 media.getMediaPlayer().setFullScreen(false);
                                 break;
-                            case KeyEvent.VK_G:
-                                System.out.println(media.getMediaPlayer().getPosition());
-                            case KeyEvent.VK_H:
-                                media.getMediaPlayer().setPosition(0.06020897f);
-                                System.out.println(media.getMediaPlayer().getTime());
-                                System.out.println(media.getMediaPlayer().getFps());
+                            case KeyEvent.VK_OPEN_BRACKET:
+                                try {
+                                    MediaPlayer.getInstance().playPrev();
+                                } catch (Exception e1) {
+                                    e1.printStackTrace();
+                                }
+                                break;
+                            case KeyEvent.VK_CLOSE_BRACKET:
+                                try {
+                                    MediaPlayer.getInstance().playNext();
+                                } catch (Exception e1) {
+                                    e1.printStackTrace();
+                                }
+                                break;
                         }
                     }
                 }

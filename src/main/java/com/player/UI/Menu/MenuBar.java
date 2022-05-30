@@ -34,14 +34,11 @@ public class MenuBar extends JMenuBar {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         JMenu file = new JMenu("文件");
         JMenuItem addFiles = new JMenuItem("添加多个媒体至播放列表");
-        addFiles.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    addFiles();
-                } catch (Exception exception) {
-                    exception.printStackTrace();
-                }
+        addFiles.addActionListener(e -> {
+            try {
+                addFiles();
+            } catch (Exception exception) {
+                exception.printStackTrace();
             }
         });
         JMenuItem addDirectory = new JMenuItem("添加文件夹至播放列表");
@@ -56,44 +53,41 @@ public class MenuBar extends JMenuBar {
             }
         });
         JMenuItem addAss = new JMenuItem("添加字幕");
-        addAss.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    LookAndFeel myLookAndFeel = UIManager.getLookAndFeel(); // 保存我的外观设置
-                    UIManager.setLookAndFeel(getSystemLookAndFeelClassName()); // 将JFileChooser外观设置成系统样式
-                    JFileChooser chooser = new JFileChooser(".");
-                    UIManager.setLookAndFeel(myLookAndFeel);
-                    chooser.setFileFilter(new FileFilter() {
-                        @Override
-                        public boolean accept(File f) {
-                            if (f.isDirectory() || (f.getName().indexOf(".") != -1 && f.getName().substring(f.getName().lastIndexOf(".")).equals(".ass"))) {
-                                return true;
-                            }
-                            return false;
+        addAss.addActionListener(e -> {
+            try {
+                LookAndFeel myLookAndFeel1 = UIManager.getLookAndFeel(); // 保存我的外观设置
+                UIManager.setLookAndFeel(getSystemLookAndFeelClassName()); // 将JFileChooser外观设置成系统样式
+                JFileChooser chooser = new JFileChooser(".");
+                UIManager.setLookAndFeel(myLookAndFeel1);
+                chooser.setFileFilter(new FileFilter() {
+                    @Override
+                    public boolean accept(File f) {
+                        if (f.isDirectory() || (f.getName().indexOf(".") != -1 && f.getName().substring(f.getName().lastIndexOf(".")).equals(".ass"))) {
+                            return true;
                         }
-                        @Override
-                        public String getDescription() {
-                            return "字幕文件(*.ass)";
-                        }
-                    });
-                    chooser.setMultiSelectionEnabled(false);
-                    chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                    chooser.setPreferredSize(new Dimension((int) (MainFrame.getFrame().getWidth() * 0.6),(int) (MainFrame.getFrame().getHeight() * 0.6)));
-                    chooser.setDialogTitle("选择媒体文件");
-                    chooser.showOpenDialog(null);
-                    File file = chooser.getSelectedFile();
-                    if (file == null) {
-                        return;
+                        return false;
                     }
-                    if (!file.getName().substring(file.getName().lastIndexOf(".")).equals(".ass")) {
-                        JOptionPane.showMessageDialog(null,file.getName() + "不是字幕文件！", "文件不支持", 0);
-                        return;
+                    @Override
+                    public String getDescription() {
+                        return "字幕文件(*.ass)";
                     }
-                    MainFrame.setAss(file);
-                } catch (Exception exception) {
-                    exception.printStackTrace();
+                });
+                chooser.setMultiSelectionEnabled(false);
+                chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                chooser.setPreferredSize(new Dimension((int) (MainFrame.getFrame().getWidth() * 0.6),(int) (MainFrame.getFrame().getHeight() * 0.6)));
+                chooser.setDialogTitle("选择媒体文件");
+                chooser.showOpenDialog(null);
+                File file1 = chooser.getSelectedFile();
+                if (file1 == null) {
+                    return;
                 }
+                if (!file1.getName().substring(file1.getName().lastIndexOf(".")).equals(".ass")) {
+                    JOptionPane.showMessageDialog(null, file1.getName() + "不是字幕文件！", "文件不支持", 0);
+                    return;
+                }
+                MainFrame.setAss(file1);
+            } catch (Exception exception) {
+                exception.printStackTrace();
             }
         });
         file.add(addFiles);

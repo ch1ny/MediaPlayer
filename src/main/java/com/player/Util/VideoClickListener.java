@@ -57,7 +57,7 @@ public class VideoClickListener extends MouseAdapter {
                     clickNum++;
                     num++;
                 }
-            },new Date(), 500);
+            },new Date(), 200);
         }
     }
 

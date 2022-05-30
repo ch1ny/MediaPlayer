@@ -22,7 +22,7 @@ public class Main {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/君行一叶舟简体.ttf")).deriveFont(20f);
+                    Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/simkai.ttf")).deriveFont(20f);
                     InitGlobalFont(customFont);  //统一设置字体
                 } catch (Exception e) {
                     e.printStackTrace();
