@@ -4,6 +4,8 @@ import com.player.MainFrame;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class Bottom extends JPanel {
     private static FileName fileName;
@@ -20,6 +22,16 @@ public class Bottom extends JPanel {
         function.setBounds((int) (MainFrame.getFrame().getWidth() * 0.2),0,(int) (MainFrame.getFrame().getWidth() * 0.8),(int) (MainFrame.getFrame().getHeight() * 0.2));
         function.setVisible(true);
         add(function);
+
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                Dimension size = e.getComponent().getSize();
+                int fileNameWidth = (int) (size.getWidth() * 0.2);
+                fileName.setBounds(0, 0, fileNameWidth, size.height);
+                function.setBounds(fileNameWidth, 0, size.width - fileNameWidth, size.height);
+            }
+        });
     }
 
     public static FileName getFileName() {

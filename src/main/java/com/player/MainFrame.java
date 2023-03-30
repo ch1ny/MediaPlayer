@@ -34,7 +34,7 @@ public class MainFrame {
     private static List list;
     private static Volume vol;
     private static Rate r;
-    private static Vector<Float> Rates = new Vector<Float>();
+    private static final Vector<Float> Rates = new Vector<Float>();
 
     public static MenuBar getMenu() {
         return menuBar;
@@ -57,7 +57,8 @@ public class MainFrame {
         double width = screenSize.getWidth();//得到宽
         double height = screenSize.getHeight();//得到高
         frame = new JFrame("Media Player");
-        frame.setResizable(false);
+        frame.setResizable(true);
+        frame.setMinimumSize(new Dimension(Math.min(1440, (int) (width - 70)), Math.min(900, (int) (height - 50))));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize((int) (width * 0.9), (int) (height * 0.9));
         frame.setLocationRelativeTo(null);//窗体居中显示
@@ -90,6 +91,7 @@ public class MainFrame {
         frame.add(view);
         RateInit();
         FocusInit();
+        FrameOnResize();
         FrameController();
     }
 
@@ -136,23 +138,42 @@ public class MainFrame {
         Rates.add(3.0f);
     }
 
+    private static void FrameOnResize() {
+        frame.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                if (media.getMediaPlayer().isFullScreen()) return;
+
+                Dimension frameSize = frame.getSize();
+                int frameWidth = frameSize.width, frameHeight = frameSize.height;
+
+                bottom.setBounds(0,(int) (frameHeight * 0.8), frameWidth, (int) (frameHeight * 0.2));
+                list.setBounds(0,0,(int) (frameWidth * 0.2),(int) (frameHeight * 0.8));
+                media.setBounds((int) (frameWidth * 0.2), 0, (int) (frameWidth * 0.8), (int) (frameHeight * 0.8));
+                view.setBounds((int) (frameWidth * 0.2), 0, (int) (frameWidth * 0.8), (int) (frameHeight * 0.8));
+
+                frame.revalidate();
+            }
+        });
+    }
+
     private static void FrameController() {
         frame.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (bottom.getFunction().isEnable) {
+                if (Bottom.getFunction().isEnable) {
                     if (e.isControlDown()) {
                         switch (e.getKeyCode()) {
                             case KeyEvent.VK_RIGHT:
                                 try {
-                                    MediaPlayer.getInstance().playNext();
+                                    MediaPlayer.playNext();
                                 } catch (Exception e1) {
                                     e1.printStackTrace();
                                 }
                                 break;
                             case KeyEvent.VK_LEFT:
                                 try {
-                                    MediaPlayer.getInstance().playPrev();
+                                    MediaPlayer.playPrev();
                                 } catch (Exception e1) {
                                     e1.printStackTrace();
                                 }
@@ -199,7 +220,7 @@ public class MainFrame {
                             case KeyEvent.VK_SPACE:
                                 MediaPlayer player = MediaPlayer.getInstance();
                                 if (player.isPlaying()) {
-                                    player.pause();
+                                    MediaPlayer.pause();
                                     Bottom.getFunction().playEnd();
                                 } else {
                                     try {
@@ -261,14 +282,14 @@ public class MainFrame {
                                 break;
                             case KeyEvent.VK_OPEN_BRACKET:
                                 try {
-                                    MediaPlayer.getInstance().playPrev();
+                                    MediaPlayer.playPrev();
                                 } catch (Exception e1) {
                                     e1.printStackTrace();
                                 }
                                 break;
                             case KeyEvent.VK_CLOSE_BRACKET:
                                 try {
-                                    MediaPlayer.getInstance().playNext();
+                                    MediaPlayer.playNext();
                                 } catch (Exception e1) {
                                     e1.printStackTrace();
                                 }

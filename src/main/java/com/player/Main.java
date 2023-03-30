@@ -15,9 +15,9 @@ import java.util.Enumeration;
 public class Main {
 
     public static void main(String[] args) {
-        /**
-         * 创建并显示GUI。
-         * 出于线程安全的考虑，这个方法在事件调用线程中调用。
+        /*
+          创建并显示GUI。
+          出于线程安全的考虑，这个方法在事件调用线程中调用。
          */
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -29,7 +29,7 @@ public class Main {
                 }
                 try {
                     new MainFrame();
-                    new MediaPlayer().init();
+                    MediaPlayer.init();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

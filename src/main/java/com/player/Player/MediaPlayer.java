@@ -50,7 +50,7 @@ public class MediaPlayer {
     private static final int MUSIC = 0;
     private static final int VIDEO = 1;
 
-    private static MediaPlayer player = new MediaPlayer();
+    private static final MediaPlayer player = new MediaPlayer();
 
     public static MediaPlayer getInstance() {
         return player;
@@ -58,17 +58,18 @@ public class MediaPlayer {
 
     public static void init() throws UnsupportedAudioFileException, IOException, LineUnavailableException, ReadOnlyFileException, TagException, InvalidAudioFrameException, CannotReadException {
         disabledLogger();
-        Vector v = getFileList();
+        Vector<String> v = getFileList();
+        assert v != null;
         if (!v.isEmpty()) {
             String path = (String) v.get(0);
             prepare(path);
-            MainFrame.getBottom().getFunction().haveSongs();
+            Bottom.getFunction().haveSongs();
         } else {
             totalTime = 0;
             MainFrame.getView().getCover().setCover(null);
             MainFrame.hideVideo();
-            MainFrame.getBottom().getFunction().noSongs();
-            MainFrame.getBottom().getFileName().setTitle("");
+            Bottom.getFunction().noSongs();
+            Bottom.getFileName().setTitle("");
             Process.getInstance().setProcess(0);
         }
         Process.getInstance().init();
@@ -98,8 +99,8 @@ public class MediaPlayer {
     public void jump(long time) {
         if (time < 0) {
             time = 0;
-        } else if (time > totalTime * 1000) {
-            time = totalTime * 1000;
+        } else if (time > totalTime * 1000L) {
+            time = totalTime * 1000L;
         }
         media.jump(time);
         media.go_on();
@@ -122,12 +123,12 @@ public class MediaPlayer {
         Bottom.getFunction().playBegin();
     }
 
-    private static Vector getFileList() {
+    private static Vector<String> getFileList() {
         File audio = new File("res/media");
         try {
             FileInputStream stream = new FileInputStream(audio);
             Scanner sc = new Scanner(stream);
-            Vector list = new Vector();
+            Vector<String> list = new Vector<String>();
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
                 list.add(line);
@@ -140,21 +141,22 @@ public class MediaPlayer {
     }
 
     public static String getMediaName(int flag) {
-        Vector v = getFileList();
+        Vector<String> v = getFileList();
+        assert v != null;
         int length = v.size();
         String now = filePath;
         if (flag < 0) {
             for (int i = 1; i < length; i++) {
-                if (v.get(i).toString().equals(now))
-                    return v.get(i - 1).toString();
+                if (v.get(i).equals(now))
+                    return v.get(i - 1);
             }
-            return v.get(length - 1).toString();
+            return v.get(length - 1);
         } else {
             for (int i = 0; i < length - 1; i++) {
-                if (v.get(i).toString().equals(now))
-                    return v.get(i + 1).toString();
+                if (v.get(i).equals(now))
+                    return v.get(i + 1);
             }
-            return v.get(0).toString();
+            return v.get(0);
         }
     }
 
@@ -163,7 +165,7 @@ public class MediaPlayer {
         filePath = path;
         if (checkMediaExists(path)) {
             String mediaName = filePath.substring(filePath.lastIndexOf("\\") + 1, filePath.lastIndexOf("."));
-            FileName left = MainFrame.getBottom().getFileName();
+            FileName left = Bottom.getFileName();
             left.setTitle(mediaName);
             switch (JudgeMoV.judgeMoV(filePath)) {
                 case MUSIC:
@@ -200,6 +202,7 @@ public class MediaPlayer {
                     reader = new WavFileReader();
                     break;
             }
+            assert reader != null;
             Artwork artwork = reader.read(new File(path)).getTag().getFirstArtwork();
             try {
                 bufferedImage = artwork.getImage();
@@ -238,27 +241,27 @@ public class MediaPlayer {
             try {
                 FileInputStream input = new FileInputStream(media);
                 Scanner sc = new Scanner(input);
-                String rest = "";
+                StringBuilder rest = new StringBuilder();
                 while (sc.hasNextLine()) {
                     String line = sc.nextLine();
                     if (!line.equals(path)) {
-                        rest += line + "\n";
+                        rest.append(line).append("\n");
                     }
                 }
                 input.close();
                 BufferedWriter bw = new BufferedWriter(new FileWriter(media));
-                bw.write(rest);
+                bw.write(rest.toString());
                 bw.flush();
                 bw.close();
                 if (filePath.equals(path)) {
                     try {
                         playNext();
                         pause();
-                    } catch (ArrayIndexOutOfBoundsException e1) {}
-                    MainFrame.getBottom().getFunction().playEnd();
-                    if (rest.equals("")) {
+                    } catch (ArrayIndexOutOfBoundsException ignored) {}
+                    Bottom.getFunction().playEnd();
+                    if (rest.toString().equals("")) {
                         init();
-                        MainFrame.getBottom().getFunction().noSongs();
+                        Bottom.getFunction().noSongs();
                     }
                 }
                 MainFrame.rebuildList();
@@ -279,13 +282,12 @@ public class MediaPlayer {
     }
 
     private static class MediaThread extends Thread {
-        private static String filepath; // 当前播放的文件路径
         private static EmbeddedMediaPlayerComponent player;
 
         public MediaThread(String file) {
-            filepath = file;
+            // 当前播放的文件路径
             player = MainFrame.getMedia();
-            player.getMediaPlayer().playMedia(filepath);
+            player.getMediaPlayer().playMedia(file);
             while (!player.getMediaPlayer().isPlaying());
             player.getMediaPlayer().pause();
             totalTime = (int) (player.getMediaPlayer().getLength() / 1000);
@@ -330,50 +332,3 @@ public class MediaPlayer {
         return media;
     }
 }
-/*
-    ☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭
-    伟大的无产阶级革命家毛泽东同志永垂不朽！ 马克思主义光辉保佑代码永无Bug！ ☭共产主义赤旗终将解放全世界！
-                                         ____
-                                __mmmm@@@@@@@@@@mmms__.
-                         _____g@@@@@@@@@@@@@@@@@@@@@@@@@m_
-                    gW@@@@@@@@@@@@@@@@@@AM@@@@@@@@@@@@@@@@Ws_
-                 ,mW@@@@@@@@@@@A*~~`        ~~***@@@@@@@@@@@@@s.
-                 @@@@@@@@@@@*~`                   V@@@@@@@@@@@@@Ws
-               ,W@@@@@@@@@~                        8@@@@@@@@@@@@@@W
-               ]@@@@@@@@A!                         8@@@@@@@@@@@@@@@|
-                @@@@@@@@`                         ,@@@@@@@@@@@@@@@@@.
-                4@@@@@A!                          !@@@@@@@@@@@@@@@@@W
-               'M@@@@W.                           @@@@@@@@@@@@@@@@@f
-                 !M@@@A****s.      imzmm==         'M@@@@@@@@@@@@@@A
-                  '@@@               mY~            '@@@@@@@@@@@@@@`
-                  i@Pd@@Wz-. @W     d@@@m_s.         !@@@@@@@@@@@@f
-                  @P]@A*~ '~,WP     Y@WAf`Y*=        !@@@@@**M@@@`
-                 ]@[ `     g@A       ~`              i@@@f . .V@f
-                 ]@[      !@@!                      -W@@Lg     f
-                 ]@b      ,@!                       m@@AVf
-                  @W      dM.                      i4@@zs      [
-                  YW.     !mX+-~V*+                ]@@Wm!=  . /
-                  '@i      !!                      g@@@P    -~
-                   Mb-   !b ,_                     M@@@b__g/
-                   !@[    M@@@Wme=*mm==-           ,G@8@@@!
-                    @W    ]@@z                     d@@@@@f
-                    !@b    **f`                   !@fV@@As
-                     V@W.                         W@fd@@['W
-                      'M@@s.                    ,W@` V\A`i@b
-                        'M@Ws                 _mWA`  ,f g@@@W.
-                          8@@@ms.            ,Mf`      d@@@@@@m__
-                        ,gPf@@@Ws.                  _mA5@*P@@@@@@@@ms_
-                   ,_gm@@@b !@@@*`    `             -` -|gA4@~Z~5(*V~/Tms.
-              ,_mm@@@@@@@@@s.'V+                       ,_A ~,/  `\\
-        ,mmW@@@@@@@@@@@@@@@@W,                          *!,gf   -
-      W@@@@@@YAK@@@@@@@@'@@MA@-    g                   ',gf`
-      f@A@Z@WW[@@@@@@@@@[Y@   -    @.                 .z@!
-        \A@@@@WP`dAffV@8@/\i      dPW               -!-'|
-        '!@@@5!KiVi i'''V*.      ,~~8b           -
-           ~8WW@[. i      8s    i! '~Vb       -
-            -!V`- i!'    `/.Vc.-`     '`
-                  '       !  g` \.     '
-                             [
-    伟大的无产阶级革命家毛泽东同志永垂不朽！ 马克思主义光辉保佑代码永无Bug！ ☭共产主义赤旗终将解放全世界！
-    ☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭☭
- */

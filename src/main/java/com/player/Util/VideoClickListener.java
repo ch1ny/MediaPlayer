@@ -21,7 +21,7 @@ public class VideoClickListener extends MouseAdapter {
     private static int clickNum = 1;		//指示鼠标点击次数，默认为单击
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (MainFrame.getBottom().getFunction().isEnable) {
+        if (Bottom.getFunction().isEnable) {
             VideoClickListener.flag = false;
             if (VideoClickListener.clickNum == 2) {
                 //鼠标点击次数为2调用双击事件
@@ -65,7 +65,7 @@ public class VideoClickListener extends MouseAdapter {
         // 单击事件
         MediaPlayer player = MediaPlayer.getInstance();
         if (player.isPlaying()) {
-            player.pause();
+            MediaPlayer.pause();
             Bottom.getFunction().playEnd();
         } else {
             try {

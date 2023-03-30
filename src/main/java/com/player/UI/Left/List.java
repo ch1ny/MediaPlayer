@@ -4,6 +4,9 @@ import com.player.MainFrame;
 import com.player.UI.Style.ScrollBarStyle;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class List extends JPanel {
     private ItemList itemList;
@@ -20,5 +23,15 @@ public class List extends JPanel {
         jScrollPane.setBounds(0, 0, (int) (MainFrame.getFrame().getWidth() * 0.2), (int) (MainFrame.getFrame().getHeight() * 0.8));
         jScrollPane.setViewportView(itemList);
         add(jScrollPane);
+
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                Dimension size = e.getComponent().getSize();
+                jScrollPane.setSize(size);
+                itemList.resetWidth(size.width);
+                MainFrame.getFrame().revalidate();
+            }
+        });
     }
 }
