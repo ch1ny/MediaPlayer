@@ -11,16 +11,18 @@ public class CoverView extends JPanel {
 
     public CoverView() {
         setLayout(null);
-        setBounds(0,0,(int) (MainFrame.getFrame().getWidth() * 0.8), (int) (MainFrame.getFrame().getHeight() * 0.85));
+        setBounds(0,0,(int) (MainFrame.getFrame().getWidth() * 0.8), (int) (MainFrame.getFrame().getHeight() * 0.8));
         setVisible(true);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
+        int width = getWidth(), height = getHeight();
+
         g.setColor(Color.black);
-        g.fillRect(0,0,this.getWidth(),this.getHeight());
+        g.fillRect(0,0, width, height);
         if (image != null) {
-            g.drawImage(image, (this.getWidth() - image.getWidth()) / 2, (this.getHeight() - image.getHeight()) / 2, null);
+            g.drawImage(image, (width - image.getWidth()) / 2, (height - image.getHeight()) / 2, null);
         }
     }
 

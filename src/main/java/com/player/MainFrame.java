@@ -2,6 +2,7 @@ package com.player;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -89,9 +90,26 @@ public class MainFrame {
         view.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         view.setBounds((int) (width * 0.9 * 0.2), 0, (int) (width * 0.9 * 0.8), (int) (height * 0.9 * 0.8));
         frame.add(view);
+
+        frame.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+            if (media.getMediaPlayer().isFullScreen()) return;
+
+            Dimension frameSize = frame.getSize();
+            int frameWidth = frameSize.width, frameHeight = frameSize.height;
+
+            bottom.setBounds(0,(int) (frameHeight * 0.8), frameWidth, (int) (frameHeight * 0.2));
+            list.setBounds(0,0,(int) (frameWidth * 0.2),(int) (frameHeight * 0.8));
+            media.setBounds((int) (frameWidth * 0.2), 0, (int) (frameWidth * 0.8), (int) (frameHeight * 0.8));
+            view.setBounds((int) (frameWidth * 0.2), 0, (int) (frameWidth * 0.8), (int) (frameHeight * 0.8));
+
+            frame.revalidate();
+            }
+        });
+
         RateInit();
         FocusInit();
-        FrameOnResize();
         FrameController();
     }
 
@@ -136,25 +154,6 @@ public class MainFrame {
         Rates.add(2.0f);
         Rates.add(2.5f);
         Rates.add(3.0f);
-    }
-
-    private static void FrameOnResize() {
-        frame.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                if (media.getMediaPlayer().isFullScreen()) return;
-
-                Dimension frameSize = frame.getSize();
-                int frameWidth = frameSize.width, frameHeight = frameSize.height;
-
-                bottom.setBounds(0,(int) (frameHeight * 0.8), frameWidth, (int) (frameHeight * 0.2));
-                list.setBounds(0,0,(int) (frameWidth * 0.2),(int) (frameHeight * 0.8));
-                media.setBounds((int) (frameWidth * 0.2), 0, (int) (frameWidth * 0.8), (int) (frameHeight * 0.8));
-                view.setBounds((int) (frameWidth * 0.2), 0, (int) (frameWidth * 0.8), (int) (frameHeight * 0.8));
-
-                frame.revalidate();
-            }
-        });
     }
 
     private static void FrameController() {
@@ -340,9 +339,20 @@ public class MainFrame {
     }
 
     private static void ScreenShot() throws IOException {
-        BufferedImage bi = media.getMediaPlayer().getSnapshot();
-        File snapshot = new File("C:\\Users\\10563\\Desktop\\snapshot.jpg");
-        ImageIO.write(bi, "jpg", snapshot);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                BufferedImage bi = media.getMediaPlayer().getSnapshot();
+                File desktopDir = FileSystemView.getFileSystemView() .getHomeDirectory();
+                String desktopPath = desktopDir.getAbsolutePath();
+                File snapshot = new File(desktopPath + "\\snapshot.jpg");
+                try {
+                    ImageIO.write(bi, "jpg", snapshot);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }).start();
     }
 
     public static EmbeddedMediaPlayerComponent getMedia() {
